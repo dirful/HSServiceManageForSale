@@ -1,0 +1,809 @@
+var 
+TypeList,
+projectNameTitle = "",
+fileID = [],
+ReceiverIdArray = [],
+mainTypeTitle = "",
+TemplateList,
+templateID,
+ProjectID,
+ReceiverList,
+ReceiverID,
+UserID,
+mainTypeLength = 0,
+clickTime = 0;
+$(document).ready(function() {
+	mainType();
+});
+// 查询出所有的大类
+function mainType() {
+	$.ajax({
+		url : "../../../serviceMessageTypeController/showAllType.do",
+		asncy : false,
+		data : {},
+		type : "post",
+		success : function(data) {
+			TypeList = $.parseJSON(data);
+			if (TypeList.length > 0) {
+				var mainType = "";
+				for ( var i = 0; i < TypeList.length; i++) {
+					if (TypeList[i].level == 1) {
+						mainTypeLength += 1;
+						mainType += "<div class='division'>"
+								+ TypeList[i].typeName + "</div>";
+					} else {
+					}
+				}
+				mainTypeTitle = "<div class='title-name' id='type1'>" + "大类"
+						+ "</div>" + "<div class='allRow'>" + mainType
+						+ "</div>";
+			} else {
+			}
+		}
+	});
+}
+// 查询出所有的项目名称
+// function allProjectName(){
+// $.ajax({
+// url : "../../../serviceMessageController/getAllProjectName.do",
+// asncy : false,
+// data : {},
+// type : "post",
+// success : function(data) {
+// projectNameList = $.parseJSON(data);
+// if(projectNameList.length>0){
+// var projectName = "";
+// for ( var i = 0; i < projectNameList.length; i++) {
+// projectName += "<div class='name'"
+// + " onclick='add("+i
+// + ")'>"
+// + projectNameList[i].projectName
+// + "</div>";
+// console.log(projectNameList[i].projectID);
+// }
+// projectNameTitle = "<div class='name' id='nameTitle'>"
+// + "项目名称"
+// + "</div>"
+// + "<div class='allRow'>"
+// + projectName + "</div>";
+// }else{
+//			
+// }
+// }
+// });
+// }
+// 点击显示所有大类
+function chooseMainType() {
+	$("#dianjixianshi").show();
+	$("#smallType").html("");
+	$("#journal").html("");
+	$("#chooseProject").html("");
+	$("#chooseProject").html(mainTypeTitle);
+	if (mainTypeLength >= 9) {
+		$("#chooseProject").css({
+			"overflow" : "auto",
+			"height" : "300px"
+		});
+	}
+}
+// 显示所选大类
+$(document).on("click", ".division", function() {
+	var diviName = $(this).text();
+	$("#dianjixianshi").hide();
+	$("#bigType").html(diviName);
+	// for(var i=0;i<TypeList.length;i++){
+	// if(TypeList[i].name == diviName){
+	// p = TypeList[i].ID;
+	// }else{}
+	// }
+	// $.ajax({
+	// url : "../../../serviceMessageTypeController/showAllSecondaryType.do",
+	// asncy : false,
+	// data : {
+	// parentID : p
+	// },
+	// type : "post",
+	// success : function(data) {
+	// console.log(data);
+	// SecondaryTypeList = $.parseJSON(data);
+	// if(SecondaryTypeList.length>0){
+	// }else{
+	// $("#bigType").html("");
+	// alert("无小类可选！");
+	// }
+	// }
+	// });
+});
+// 显示小类
+function chooseCategories() {
+	var big = $("#bigType").text();
+	var CategoriesTitle = "";
+	$("#chooseProject").html("");
+	if (big != "") {
+		var Categories = "", parID, SecondaryTypeLength = 0;
+		for ( var i = 0; i < TypeList.length; i++) {
+			if (TypeList[i].typeName == big) {
+				parID = TypeList[i].ID;
+			}
+			if (TypeList[i].level == 2 && TypeList[i].PARENTID == parID) {
+				SecondaryTypeLength += 1;
+				Categories += "<div class='section' name='" + TypeList[i].ID
+						+ "'>" + TypeList[i].typeName + "</div>";
+			}
+		}
+		CategoriesTitle = "<div class='title-name' id='type2'>" + "小类"
+				+ "</div>" + "<div class='allRow'>" + Categories + "</div>";
+		if (SecondaryTypeLength >= 9) {
+			$("#chooseProject").css({
+				"overflow" : "auto",
+				"height" : "300px"
+			});
+		} else {
+		}
+		$("#dianjixianshi").show();
+		$("#chooseProject").html(CategoriesTitle);
+	} else {
+		alert("请先填写大类！");
+	}
+}
+$(document).on("click", ".section", function() {
+	var secName = $(this).text();
+	str0 = $(this).attr("name");
+	$("#journal").html("");
+	$("#dianjixianshi").hide();
+	$("#smallType").html(secName);
+	$.ajax({
+		url : "../../../serviceMessageTypeController/showAllTemplate.do",
+		asncy : false,
+		data : {
+			type : str0
+		},
+		type : "post",
+		success : function(data) {
+			TemplateList = $.parseJSON(data);
+			if (TemplateList.length <= 0) {
+				alert("模板为空！");
+				$("#smallType").html("");
+			}
+		}
+	});
+
+});
+// 选择模板
+function chooseTemplate() {
+	var small = $("#smallType").html();
+	var big = $("#bigType").html();
+	if (small != "" && big != "") {
+		$("#dianjixianshi").show();
+		var Template = "";
+		for ( var i = 0; i < TemplateList.length; i++) {
+			Template += "<div class='templateName' name='TemplateList[i].ID'>"
+					+ TemplateList[i].templetName + "</div>";
+		}
+		TemplateTitle = "<div class='templateName' id='type3'>" + "模板"
+				+ "</div>" + "<div class='allRow'>" + Template + "</div>";
+		if (TemplateList.length >= 9) {
+			$("#chooseProject").css({
+				"overflow" : "auto",
+				"height" : "300px"
+			});
+		} else {
+		}
+		$("#chooseProject").html("");
+		$("#chooseProject").html(TemplateTitle);
+	} else {
+		alert("请先填写上面的信息！");
+	}
+}
+$(document).on("click", ".templateName", function() {
+	var temName = $(this).text(),
+	TemplateID = $(this).attr("name") ;
+	$("#dianjixianshi").hide();
+	$("#journal").html(temName);
+
+});
+// function addTemplate(p) {
+// templateID = p;//模板ID
+// $("#dianjixianshi").hide();
+// var q = "TemplateID" + p;
+// var text = $("#" + q + "").text();
+// $("#journal").html(text);
+// // allProjectName();
+// }
+// 跳转填写页面,
+function toWrite() {
+	var small = $("#smallType").html();
+	var big = $("#bigType").html();
+	var log = $("#journal").html();
+	// if (small != "" && big != "" && log != "") {
+	$("#messageTemplateWrite").show();
+	$("#messageTemplate").hide();
+	$("#template").css({
+		"border-color" : "black",
+		"color" : "black"
+	});
+	$("#detailed").css({
+		"border-color" : "rgb(0, 204, 0)",
+		"color" : "rgb(0, 204, 0)"
+	});
+	// } else {
+	// alert("请填写完整信息！");
+	// }
+}
+// 显示选择项目名称
+// function show() {
+// $("#dianjixianshi").show();
+// $("#chooseProject").html("");
+// if (projectNameList.length >= 9) {
+// $("#chooseProject").css({"overflow" : "auto","height" : "300px"});
+// }
+// $("#chooseProject").html(projectNameTitle);
+// }
+// 显示联系人
+// function add(i) {
+// $("#dianjixianshi").hide();
+// $("#linkman").html(projectNameList[i].linkman);
+// $("#projectName").html(projectNameList[i].projectName);
+// }
+// 选择接收人
+function chooseReceiver() {
+	$(".name").unbind();
+	$("#dianjixianshi").show();
+	$("#chooseProject").css({
+		"overflow" : "auto",
+		"height" : "auto"
+	});
+	$("#chooseProject").html("");
+	$
+			.ajax({
+				url : "../../../serviceMessageController/chooseReceiver.do",
+				asncy : false,
+				data : {},
+				type : "post",
+				success : function(data) {
+					ReceiverList = $.parseJSON(data);
+					if (ReceiverList.length > 0) {
+						var j, Receiver = "", h = 1;
+						for ( var i = 0; i < ReceiverList.length; i++) {
+							if (i > 0) {
+								if (ReceiverList[i].demeID != ReceiverList[j].demeID) {
+									Receiver += "<div class='depename' value='"
+											+ ReceiverList[i].departmentName
+											+ "'>"
+											+ ReceiverList[i].departmentName
+											+ "</div>";
+									j = i;
+									h++;
+								}
+								;
+							} else {
+								Receiver += "<div class='depename' value='"
+										+ ReceiverList[i].departmentName + "'>"
+										+ ReceiverList[i].departmentName
+										+ "</div>";
+								j = i;
+							}
+							;
+						}
+						ReceiverListitle = "<div class='title-name' id='type4'>"
+								+ "接受人"
+								+ "</div>"
+								+ "<div class='allRow'>"
+								+ Receiver + "</div>";
+						if (h >= 9) {
+							$("#chooseProject").css({
+								"overflow" : "auto",
+								"height" : "300px"
+							});
+						} else {
+						}
+						$("#chooseProject").html(ReceiverListitle);
+					} else {
+					}
+					;
+				}
+			});
+}
+$(document).on(
+		"click",
+		".depename",
+		function() {
+			$("#chooseProject").html("");
+			$("#chooseProject").empty();
+			var SdemeName = $(this).attr("value");
+			var ReceiverName = "";
+			$("#chooseProject").css({
+				"overflow" : "auto",
+				"height" : "auto"
+			});
+			for ( var i = 0; i < ReceiverList.length; i++) {
+				if (ReceiverList[i].departmentName == SdemeName) {
+					ReceiverName += "<div class='name' value='" + i + "'>"
+							+ ReceiverList[i].employeeName + "</div>";
+				}
+			}
+			ReceiverNameListitle = "<div class='title-name' id='type5'>"
+					+ "接受人" + "</div>" + "<div class='allRow'>" + ReceiverName
+					+ "</div>";
+			if (ReceiverList.length >= 9) {
+				$("#chooseProject").css({
+					"overflow" : "auto",
+					"height" : "300px"
+				});
+			} else {
+			}
+			$("#chooseProject").html(ReceiverNameListitle);
+		});
+
+$(document)
+		.on(
+				"click",
+				".name",
+				function() {
+					var order = $(this).attr("value"), name = ReceiverList[order].employeeName, employeeId = ReceiverList[order].employeeID, reNameLi = "";
+					$("#dianjixianshi").hide();
+					$("#name-row").css({
+						"border-bottom" : "0px"
+					});
+					if (clickTime == 0) {
+						ReceiverIdArray.push(employeeId);
+						reNameLi = "<li class='recName'>" + name + "</li>";
+						clickTime = 1;
+					} else {
+						var j = 0;
+						for ( var i = 0; i < ReceiverIdArray.length; i++) {
+							if (ReceiverIdArray[i] == employeeId) {
+								alert("该成员已选择！");
+								break;
+							} else {
+								j++;
+							}
+						}
+						if (j == ReceiverIdArray.length) {
+							ReceiverIdArray.push(employeeId);
+							reNameLi = "<li class='recName'>" + name + "</li>";
+						}
+					}
+					$(".name-list").css({
+						"display" : "block"
+					});
+					$(".name-list").append(reNameLi);
+					// console.log("ReceiverIdArray删除前:"+ReceiverIdArray);
+				});
+// 删除接收人
+$(document).on("click", ".recName", function() {
+	var name = $(this).text();
+	$(this).remove();
+	for ( var i = 0; i < ReceiverList.length; i++) {
+		if (ReceiverList[i].employeeName == name) {
+			var receId = ReceiverList[i].employeeID;
+		}
+	}
+	for ( var i = 0; i < ReceiverIdArray.length; i++) {
+		if (ReceiverIdArray[i] == receId) {
+			if (i != ReceiverIdArray.length) {
+				ReceiverIdArray[i] = ReceiverIdArray[i + 1];
+				ReceiverIdArray.length -= 1;
+			} else {
+				ReceiverIdArray.pop();
+			}
+		}
+	}
+	// console.log("ReceiverIdArray删除后:"+ReceiverIdArray);
+});
+
+// 图片上传及实时显示
+function openBrowse() {
+	// $("#upload").click(); 这一句可代替下面的第三句，也可以代替本方法的功能，其他语句是浏览器兼容问题
+	var ie = navigator.appName == "Microsoft Internet Explorer" ? true : false;
+	if (ie) {
+		document.getElementById("upload").click();
+		// document.getElementById("filename").value=document.getElementById("upload").value;
+	} else {
+		var a = document.createEvent("MouseEvents");// FF的处理
+		a.initEvent("click", true, true);
+		document.getElementById("upload").dispatchEvent(a);
+	}
+}
+// // // 图片上传
+// // $.ajaxFileUpload({
+// // url : '../../../systemFileController/uploadImg.do',// 用于文件上传的服务器端请求地址
+// // secureuri : false,// 是否启用安全提交，一般设置为false
+// // fileElementId : 'upload',// 文件上传控件的id
+// // dataType : 'json',
+// // success : function(result) {
+// // alert("上传成功！");
+// // fileID.push(result[0].fileID);
+// // picID = result[0].fileID;
+// // photoName += picID + ",";
+// // $("#picID").val(picID);
+// // }
+// // });
+// 图片上传预览 IE是用了滤镜。
+function previewImage(file) {
+	if (file.files && file.files[0]) {
+		var icon = document.getElementById('imghead');
+		var parent = document.getElementById('photos');
+		var img = document.createElement("img");
+		img.setAttribute("class", "photo");
+		parent.insertBefore(img, icon);
+		var reader = new FileReader();
+		reader.onload = function(evt) {
+			img.src = evt.target.result;
+		};
+		reader.readAsDataURL(file.files[0]);
+		var photos = document.getElementsByClassName("photo");
+		if (photos.length == 4) {
+			$("#imghead").hide();
+		}
+	}
+	// 图片上传
+	$("#form1").ajaxSubmit({
+		url : "../../../systemFileController/uploadImg.do",// 用于文件上传的服务器端请求地址
+		secureuri : true,// 是否启用安全提交，一般设置为false
+		fileElementId : 'upload',// 文件上传控件的id
+		dataType : 'json',
+		success : function(result) {
+			console.log(result);
+			fileID.push(result[0].fileID);
+			picID = result[0].fileID;
+			$('.photo:last').attr("name", picID);
+		}
+	});
+}
+// 点击查看大图
+$(document).on("click", ".photo", function() {
+	var now_pic = $(this).attr("src");
+	$(this).attr("id", "small");
+	$("#hah").show();
+	var realWidth;// 真实的宽度
+	var realHeight;// 真实的高度
+	var tempPic = "<img id= 'bigpic_pic'src='" + now_pic + "'></img>";
+	var windowWidth = $(window).width();
+	var windowHeight = $(window).height();
+
+	$("#hah").css({
+		"height" : windowHeight + "px"
+	});
+	$(".background1").css({
+		"visibility" : "hidden"
+	});
+	$(".background1").html(tempPic);
+	var img = $(this);
+	// 这里做下说明，$("<img/>")这里是创建一个临时的img标签，类似js创建一个new Image()对象！
+	$("<img/>").attr("src", $(img).attr("src")).load(function() {
+		realWidth = this.width;
+		realHeight = this.height;
+		// 确定图片缩放比例
+		if ((realWidth >= windowWidth) && (realHeight >= windowHeight)) {
+			if ((realWidth / windowWidth) >= (realHeight / windowHeight)) {
+				var sScale = windowWidth / realWidth;
+				realWidth = windowWidth;
+				realHeight = realHeight * sScale;
+			} else {
+				var sScale = windowHeight / realHeight;
+				realHeight = windowHeight;
+				realWidth = realWidth * sScale;
+			}
+		} else if (realWidth >= windowWidth && realHeight < windowHeight) {
+			var sScale = windowWidth / realWidth;
+			realWidth = windowWidth;
+			realHeight = realHeight * sScale;
+		} else if (realWidth < windowWidth && realHeight >= windowHeight) {
+			var sScale = windowHeight / realHeight;
+			realHeight = windowHeight;
+			realWidth = realWidth * sScale;
+		}
+		$("#bigpic_pic").css({
+			"position" : "absolute",
+			"top" : "50%",
+			"left" : "50%",
+			"margin-top" : "-" + realHeight / 2 + "px",
+			"margin-left" : "-" + realWidth / 2 + "px",
+			"height" : realHeight + "px",
+			"width" : realWidth + "px"
+		});
+		$(".background1").css({
+			"visibility" : "visible"
+		});
+		$("#operate").show();
+		$("#title").hide();
+		$("#submitMessage").hide();
+		$("#messageTemplateWrite").hide();
+	});
+	// 显示或隐藏删除框
+	var clickNumber = 0;
+	$("#bigpic_pic").click(function() {
+		clickNumber++;
+		if (clickNumber % 2 == 0) {
+			$("#operate").show();
+		} else {
+			$("#operate").hide();
+		}
+	});
+});
+// 是否删除
+$(".delete").click(function() {
+	PICID = $("#small").attr("name");
+	var a = confirm("你确定要删除吗？");
+	if (a) {
+		$("#bigpic_pic").remove();
+		$("#small").remove();
+		$("#hah").hide();
+		$("#imghead").show();
+		for ( var i = 0; i < fileID.length; i++) {
+			if (fileID[i] == PICID) {
+				if (i != fileID.length) {
+					fileID[i] = fileID[i + 1];
+					fileID.length -= 1;
+				} else {
+					fileID.pop();
+					$("#imghead").show();
+				}
+			}
+		}
+		$.ajax({
+			type : "POST",
+			url : "../../../systemFileController/deletePictureByID.do",
+			async : false,
+			data : {
+				fileID : PICID
+			},
+			success : function(data) {
+				console.log(data);
+				$("#operate").hide();
+				$("#title").show();
+				$("#submitMessage").show();
+				$("#messageTemplateWrite").show();
+			}
+		});
+	} else {
+	}
+});
+// 点击返回小图
+$(document).on("click", ".return", function() {
+	$("#bigpic_pic").remove();
+	$("#small").attr("id", "");
+	$("#hah").hide();
+	$("#operate").hide();
+	$("#title").show();
+	$("#submitMessage").show();
+	$("#messageTemplateWrite").show();
+});
+// 提价服务信息
+function submitMessage() {
+	var TheTotalOffer = $("#TheTotalOffer").val(), // 报价总额
+		FILEID = fileID.join(","),
+		messageTitle = $("#messageTitle").val(),
+		ProjectName = $("#projectName").val(),
+		contactsName = $("#linkman").val();
+	var ReceiverID = ReceiverIdArray.join(",");
+	if (TheTotalOffer != "" && ReceiverID != "" && ProjectName != ""
+			&& messageTitle != "") {
+		if (checkMoney(TheTotalOffer)) {
+			$.ajax({
+						url : "../../../serviceMessageController/addNewServiceMessage.do",
+						asncy : false,
+						data : {
+							TheTotalOffer : TheTotalOffer,
+							pictureID : FILEID,
+							OfferorsID : UserID,
+							ProjectName : ProjectName,
+							ReceiverID : ReceiverID,
+							templateID : templateID,
+							Title : messageTitle,
+							contactsName : contactsName,
+						},
+						type : "post",
+						success : function(data) {
+							if (data == "true") {
+								alert("提交成功！");
+								window.location.href = "../../ServiceMessageManagement/html/ServiceMessageManagement.html?backurl="
+										+ window.location.href;
+							} else {
+								alert("提交失败！");
+							}
+							;
+						}
+					});
+		} else {
+		}
+		;
+	} else {
+		alert("请填写完整信息！");
+	}
+	;
+}
+// 隐藏提示框
+$(document).on("click", "#bigBackground", function() {
+	$("#dianjixianshi").hide();
+	$("#chooseProject").css({
+		"overflow" : "auto",
+		"height" : "auto"
+	});
+});
+// 验证报销总额是否为大于0的纯数字
+function checkMoney(p) {
+	if (!(/^[1-9]\d*(\.\d+)?$/.test(p))) {
+		alert("报销总额大于0且为纯数字");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+// var filechooser = document.getElementById("choose");
+// // 用于压缩图片的canvas
+// var canvas = document.createElement("canvas");
+// var ctx = canvas.getContext('2d');
+// // 瓦片canvas
+// var tCanvas = document.createElement("canvas");
+// var tctx = tCanvas.getContext("2d");
+// var maxsize = 100 * 1024;
+// $("#upload").on("click", function () {
+// filechooser.click();
+// })
+// .on("touchstart", function () {
+// $(this).addClass("touch");
+// })
+// .on("touchend", function () {
+// $(this).removeClass("touch");
+// });
+// filechooser.onchange = function () {
+// if (!this.files.length) return;
+// var files = Array.prototype.slice.call(this.files);
+// if (files.length > 4) {
+// $("#upload").css({"display":"none"});
+// $(".content").css({"height":"457px"});
+// alert("最多同时只可上传9张图片");
+// return;
+// }
+// files.forEach(function (file, i) {
+// if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+// var reader = new FileReader();
+// var li = document.createElement("li");
+// // 获取图片大小
+// var size = file.size/1024 > 1024 ? (~~(10*file.size/1024/1024))/10 + "MB" :
+// ~~(file.size/1024) + "KB";
+// li.innerHTML = '<div class="progress"><span></span></div><div
+// class="size">'+size+'</div>';
+// $(".img-list").append($(li));
+// $(".img-list").css({"display":"block"});
+// $(".content").css({"height":"497px"});
+// $("#special").css({"width":"100%","text-align":"center",
+// "border-top":"1px solid rgb(192, 192, 192)"});
+// $(".img-list").css({"border-left":"1px solid rgb(192, 192, 192)",
+// "border-right": "1px solid rgb(192, 192, 192)"});
+// reader.onload = function () {
+// var result = this.result;
+// var img = new Image();
+// img.src = result;
+// $(li).css("background-image", "url(" + result + ")");
+// //如果图片大小小于100kb，则直接上传
+// if (result.length <= maxsize) {
+// img = null;
+// upload(result, file.type, $(li));
+// return;
+// }
+// // 图片加载完毕之后进行压缩，然后上传
+// if (img.complete) {
+// callback();
+// } else {
+// img.onload = callback;
+// }
+// function callback() {
+// var data = compress(img);
+// upload(data, file.type, $(li));
+// img = null;
+// }
+// };
+// reader.readAsDataURL(file);
+// });
+// };
+// // 使用canvas对大图片进行压缩
+// function compress(img) {
+// var initSize = img.src.length;
+// var width = img.width;
+// var height = img.height;
+// //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+// var ratio;
+// if ((ratio = width * height / 4000000)>1) {
+// ratio = Math.sqrt(ratio);
+// width /= ratio;
+// height /= ratio;
+// }else {
+// ratio = 1;
+// }
+// canvas.width = width;
+// canvas.height = height;
+// // 铺底色
+// ctx.fillStyle = "#fff";
+// ctx.fillRect(0, 0, canvas.width, canvas.height);
+// //如果图片像素大于100万则使用瓦片绘制
+// var count;
+// if ((count = width * height / 1000000) > 1) {
+// count = ~~(Math.sqrt(count)+1); //计算要分成多少块瓦片
+// // 计算每块瓦片的宽和高
+// var nw = ~~(width / count);
+// var nh = ~~(height / count);
+// tCanvas.width = nw;
+// tCanvas.height = nh;
+// for (var i = 0; i < count; i++) {
+// for (var j = 0; j < count; j++) {
+// tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio,
+// 0, 0, nw, nh);
+// ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+// }
+// }
+// } else {
+// ctx.drawImage(img, 0, 0, width, height);
+// }
+// //进行最小压缩
+// var ndata = canvas.toDataURL('image/jpeg', 0.1);
+// console.log('压缩前：' + initSize);
+// console.log('压缩后：' + ndata.length);
+// console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");
+// tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
+// return ndata;
+// }
+// // 图片上传，将base64的图片转成二进制对象，塞进formdata上传
+// function upload(basestr, type, $li) {
+// var text = window.atob(basestr.split(",")[1]);
+// var buffer = new Uint8Array(text.length);
+// var pecent = 0 , loop = null;
+// for (var i = 0; i < text.length; i++) {
+// buffer[i] = text.charCodeAt(i);
+// }
+// var blob = getBlob(buffer, type);
+// var xhr = new XMLHttpRequest();
+// var formdata = new FormData();
+// formdata.append('imagefile', blob);
+// xhr.open('post', '/cupload');
+// xhr.onreadystatechange = function () {
+// if (xhr.readyState == 4 && xhr.status == 200) {
+// var jsonData = JSON.parse(xhr.responseText);
+// console.log('上传成功：' + jsonData[0].path);
+// clearInterval(loop);
+// //当收到该消息时上传完毕
+// $li.find(".progress span").animate({'width': "100%"}, pecent < 95 ? 200 : 0,
+// function () {
+// $(this).html("上传成功");
+// });
+// $(".pic-list").append('<a href="' + jsonData[0].path + '">' +jsonData[0].path
+// + '（' + jsonData[0].size+'）<img src="' + jsonData[0].path + '" /></a>');
+// }
+// };
+// //数据发送进度，前50%展示该进度
+// xhr.upload.addEventListener('progress', function (e) {
+// if (loop) return;
+// pecent = ~~(100 * e.loaded / e.total) / 2;
+// $li.find(".progress span").css('width', pecent + "%");
+// if (pecent == 50) {
+// mockProgress();
+// }
+// }, false);
+// //数据后50%用模拟进度
+// function mockProgress() {
+// if (loop) return;
+// loop = setInterval(function () {
+// pecent++;
+// $li.find(".progress span").css('width', pecent + "%");
+// if (pecent == 99) {
+// clearInterval(loop);
+// }
+// }, 100);
+// }
+// xhr.send(formdata);
+// }
+// // 获取blob对象的兼容性写法
+//function getBlob(buffer, format){
+//    var Builder = window.WebKitBlobBuilder || window.MozBlobBuilder;
+//    if(Builder){
+//        var builder = new Builder;
+//        builder.append(buffer);
+//        return builder.getBlob(format);
+//    } else {
+//        return new window.Blob([ buffer ], {type: format});
+//    }
+//}
+

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqut.dao.Project.ProjectDao">
+ 
+    <insert id="save" parameterType="com.cqut.entity.Project.Project">  
+     <![CDATA[   
+         insert into  project ( ID, projectCode, projectName, companyID, consumerWorkPlace, contactsName, createTime, startTime, endTime, leaderID, templetID, webSite, projectType, trade, progress, remarks, typeID,picID,offerID,ReceiverID)
+         values(#{ID}, #{projectCode}, #{projectName}, #{companyID}, #{consumerWorkPlace}, #{contactsName}, #{createTime}, #{startTime}, #{endTime}, #{leaderID}, #{templetID}, #{webSite}, #{projectType}, #{trade}, #{progress}, #{remarks}, #{typeID}, #{picID}, #{offerID},#{ReceiverID})	
+     ]]>   
+    </insert>
+  
+    
+    <!--  mysql -->
+    <insert id="saveEntities"> 
+	 	 <![CDATA[  
+	    	insert into project ( ID, projectCode, projectName, companyID, consumerWorkPlace, contactsName, createTime, startTime, endTime, leaderID, templetID, webSite, projectType, trade, progress, remarks, typeID, picID, offerID,ReceiverID) VALUES 
+	    ]]>  
+	    <foreach collection="entities" item="item" index="index" separator=",">   
+	         ( #{item.ID}, #{item.projectCode}, #{item.projectName}, #{item.companyID}, #{item.consumerWorkPlace}, #{item.contactsName}, #{item.createTime}, #{item.startTime}, #{item.endTime}, #{item.leaderID}, #{item.templetID}, #{item.webSite}, #{item.projectType}, #{item.trade}, #{item.progress}, #{item.remarks}, #{item.typeID}， #{item.picID}, #{item.offerID},#{item.ReceiverID})
+	    </foreach> 
+	</insert> 
+	
+	
+	<update id="updateByID" >
+		<![CDATA[  
+			update project set 	
+      		projectCode = #{entity.projectCode},
+      		projectName = #{entity.projectName},
+      		companyID = #{entity.companyID},
+      		consumerWorkPlace = #{entity.consumerWorkPlace},
+      		contactsName = #{entity.contactsName},
+      		createTime = #{entity.createTime},
+      		startTime = #{entity.startTime},
+      		endTime = #{entity.endTime},
+      		leaderID = #{entity.leaderID},
+      		templetID = #{entity.templetID},
+      		webSite = #{entity.webSite},
+      		projectType = #{entity.projectType},
+      		trade = #{entity.trade},
+      		progress = #{entity.progress},
+      		remarks = #{entity.remarks},
+      		typeID = #{entity.typeID},
+      		picID = #{entity.picID},
+      		offerID= #{entity.offerID},
+      		ReceiverID= #{entity.ReceiverID}
+      	]]>
+      	<where>
+      		ID = #{id}
+      	</where>  		
+	</update>
+		
+		
+	<update id="updateByCondition">
+		<![CDATA[  
+			update project set 	
+      		projectCode = #{entity.projectCode},
+      		projectName = #{entity.projectName},
+      		companyID = #{entity.companyID},
+      		consumerWorkPlace = #{entity.consumerWorkPlace},
+      		contactsName = #{entity.contactsName},
+      		createTime = #{entity.createTime},
+      		startTime = #{entity.startTime},
+      		endTime = #{entity.endTime},
+      		leaderID = #{entity.leaderID},
+      		templetID = #{entity.templetID},
+      		webSite = #{entity.webSite},
+      		projectType = #{entity.projectType},
+      		trade = #{entity.trade},
+      		progress = #{entity.progress},
+      		remarks = #{entity.remarks},
+      		typeID = #{entity.typeID},
+      		picID = #{entity.picID},
+      		offerID= #{entity.offerID},
+      		ReceiverID= #{entity.ReceiverID}
+      	]]>
+      	<where>
+      		<if test="condition != null">
+      			${condition}
+      		</if>
+      	</where>  		
+	</update>	
+	
+	<update id="updatePropByID">
+		<![CDATA[  
+			update  project set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	ID = #{id}
+        </where>
+	</update>	
+	
+	<update id="updatePropByCondition">
+		<![CDATA[  
+			update  project set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</update>	
+	
+   <delete id="deleteByID"  parameterType="string">
+		<![CDATA[   
+			delete from project   
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</delete>	
+	
+	<delete id="deleteByCondition"  parameterType="string">
+		<![CDATA[   
+			delete from project  
+		]]>
+		<where>
+			<if test="condition != null">
+				${condition}
+			</if>	
+		</where>	
+	</delete>	
+	
+	<delete id="deleteEntities"  parameterType="string">
+		<![CDATA[   
+			delete from project    
+		]]>
+		<where>
+			 ID in
+			 <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+          		#{item}
+        	</foreach>
+		</where>	
+	</delete>
+	
+	
+	<select id="getByID" resultType="com.cqut.entity.Project.Project">
+		<![CDATA[   
+			select * from project 
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</select>
+	
+	<select id="getByCondition" resultType="com.cqut.entity.Project.Project">
+		<![CDATA[   
+			select * from project 
+		]]>
+		<where>
+			<if test="condition != null">
+		 		${condition}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="findByID" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from project 
+        <where>
+        	ID = #{id}
+        </where>
+	</select>	
+	
+	
+	<select id="findByCondition" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from project 
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</select>		
+	
+		
+	<select id="getCountByCondition" resultType="int">
+		select count(distinct ID) from project
+		<where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>	
+        </where>
+	</select>	
+</mapper>

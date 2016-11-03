@@ -1,0 +1,195 @@
+@CHARSET "UTF-8";
+*{
+	padding:0;
+	margin: 0;
+	font-size: 16px;
+}
+
+.nav{
+	width: 96%;
+	height: 50px;
+	margin: 0 auto;
+}
+#btn1{
+	width: 50%;
+	height:50px;
+	float: left;
+	text-align: center;
+	line-height: 50px;
+	border-bottom:solid 2px rgb(0,255,0);
+	color:rgb(0,255,0);
+}
+#btn2{
+	width: 50%;
+	height:50px;
+	float: left;
+	text-align: center;
+	line-height: 50px;
+	border-bottom:solid 2px #999999;
+	color:#999999;
+}
+
+.data_box{
+	width: 96%;
+	margin: 20px auto; 
+}
+
+.data_row{
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid rgb(204,204,204);
+}
+
+.data_row_select{
+	overflow:hidden;
+	border-bottom: 1px solid rgb(204,204,204);
+}
+
+.data_row2{
+	text-align: center;
+}
+.data{
+	width:50%;
+	height: 30px;
+	line-height: 30px;
+	float: right;
+	margin-right: 2.5%;
+	margin-top:10px;
+	border:none;
+	text-align:right;
+}
+.data_input{
+	height: 30px;
+	width:60%;
+	line-height: 30px;
+	float: right;
+	margin-right: 2.5%;
+	margin-top:10px;
+	border:none;
+}
+.data_area{
+	height: 85%;
+	width: 60%;
+	float: right;
+	margin-right: 2.5%;
+	margin-top:10px;
+	border:none;
+	rows:50;
+}
+
+#department{
+	margin-left:10%;
+	width:20%;
+}
+
+#employee{
+	margin-left:5%;
+	width:20%;
+}
+
+#addReceiveMan{
+	height: 35px;
+	line-height: 35px;
+	border:none;
+	width: 25%;
+	background:rgb(0,204,0);
+	color:#fff;
+	-webkit-appearance:none;
+}
+
+.receiveManDiv{
+	width:25%;
+	height:45px;
+	float:left;
+}
+
+.receiveManName{
+	display:block;
+	text-align:center;
+	line-height:45px;
+}
+
+.submit{
+	height: 34px;
+	width: 96%;
+	margin: 0 auto;
+	margin-top: 10%;
+	margin-bottom: 20px;
+}
+
+.submit input{
+	height: 35px;
+	line-height: 35px;
+	border:none;
+	width: 100%;
+	margin: 0 auto;
+	background:rgb(0,204,0);
+	color:#fff;
+	-webkit-appearance:none;
+}
+#photos{
+	height:90px;
+	width:100%;
+}
+.photo{
+	height:70px;
+	width:23%;
+	margin-top: 5px;
+	margin-left: 4px;
+}
+.photoAdd{
+	height:70px;
+	width:23%;
+	margin-top: 5px;
+	margin-left: 4px;
+}
+#imgUpload{
+	height:90px;
+	width:25%;
+	border-radius:40px;
+    float: left;
+    margin-top: 5px;
+	/* position:absolute;
+    top: 1%;  */
+	background-color:#000;
+}
+.expandImgBox{
+	float:left;
+}
+#expandImg{
+	position: absolute; 
+	z-index: 100; 
+	display: block none; 	
+}
+#hah {
+	/* position: fixed; */
+	display: none;
+	top: 0;
+	left:0;
+	z-index:999;
+	justify-content: center;
+	align-items: center;
+	overflow:auto;
+}
+#operate{
+	height:35px;
+	width:100%;
+	position:fixed;
+	top:0px;
+	display:inline-block;
+	background-color: rgb(0,0,0);
+}
+.delete{
+	height:35px;
+	 width: 30px;
+	float:right;
+	margin-right: 5px;
+	-webkit-appearance:none;
+}
+.return{
+	float:left;
+	margin-left: 5px;
+	height: 35px;
+    width: 30px;
+    -webkit-appearance:none;
+}

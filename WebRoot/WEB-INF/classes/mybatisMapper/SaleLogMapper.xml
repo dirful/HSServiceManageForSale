@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqut.dao.SaleLog.SaleLogDao">
+ 
+    <insert id="save" parameterType="com.cqut.entity.SaleLog.SaleLog">  
+     <![CDATA[   
+         insert into  saleLog ( ID, TempletID, Assignments, ContractVolume, Phone, Email, Visit, List, CustomerName, ContactID, Purpose, Results, Contents, ImageID, State, processID, progress,SaleLogTypeCode,CreateTime,SaleLogName,Receivableamount,OfferorsID)
+         values(#{ID}, #{TempletID}, #{Assignments}, #{ContractVolume}, #{Phone}, #{Email}, #{Visit}, #{List}, #{CustomerName}, #{ContactID}, #{Purpose}, #{Results}, #{Contents}, #{ImageID}, #{State}, #{processID}, #{progress},#{SaleLogTypeCode},#{CreateTime},#{SaleLogName},#{Receivableamount},#{OfferorsID})	
+     ]]>   
+    </insert>
+  
+    
+    <!--  mysql -->
+    <insert id="saveEntities"> 
+	 	 <![CDATA[  
+	    	insert into saleLog ( ID, TempletID, Assignments, ContractVolume, Phone, Email, Visit, List, CustomerName, ContactID, Purpose, Results, Contents, ImageID, State, processID, progress,SaleLogTypeCode,CreateTime,SaleLogName,Receivableamount,OfferorsID)) VALUES 
+	    ]]>  
+	    <foreach collection="entities" item="item" index="index" separator=",">   
+	         ( #{item.ID}, #{item.TempletID}, #{item.Assignments}, #{item.ContractVolume}, #{item.Phone}, #{item.Email}, #{item.Visit}, #{item.List}, #{item.CustomerName}, #{item.ContactID}, #{item.Purpose}, #{item.Results}, #{item.Contents}, #{item.ImageID}, #{item.State}, #{item.processID}, #{item.progress},#{item.SaleLogTypeCode},#{item.CreateTime},#{item.SaleLogName},#{item.Receivableamount},#{item.OfferorsID})
+	    </foreach> 
+	</insert> 
+	
+	
+	<update id="updateByID" >
+		<![CDATA[  
+			update saleLog set 	
+      		TempletID = #{entity.TempletID},
+      		Assignments = #{entity.Assignments},
+      		ContractVolume = #{entity.ContractVolume},
+      		Phone = #{entity.Phone},
+      		Email = #{entity.Email},
+      		Visit = #{entity.Visit},
+      		List = #{entity.List},
+      		CustomerName = #{entity.CustomerName},
+      		ContactID = #{entity.ContactID},
+      		Purpose = #{entity.Purpose},
+      		Results = #{entity.Results},
+      		Contents = #{entity.Contents},
+      		ImageID = #{entity.ImageID},
+      		State = #{entity.State},
+      		processID = #{entity.processID},
+      		progress = #{entity.progress},
+      		SaleLogTypeCode=#{entity.SaleLogTypeCode},
+      		CreateTime=#{entity.CreateTime},
+      		SaleLogName=#{entity.SaleLogName},
+      		Receivableamount=#{entity.Receivableamount},
+      		OfferorsID=#{entity.OfferorsID}
+      	]]>
+      	<where>
+      		ID = #{id}
+      	</where>  		
+	</update>
+		
+		
+	<update id="updateByCondition">
+		<![CDATA[  
+			update saleLog set 	
+      		TempletID = #{entity.TempletID},
+      		Assignments = #{entity.Assignments},
+      		ContractVolume = #{entity.ContractVolume},
+      		Phone = #{entity.Phone},
+      		Email = #{entity.Email},
+      		Visit = #{entity.Visit},
+      		List = #{entity.List},
+      		CustomerName = #{entity.CustomerName},
+      		ContactID = #{entity.ContactID},
+      		Purpose = #{entity.Purpose},
+      		Results = #{entity.Results},
+      		Contents = #{entity.Contents},
+      		ImageID = #{entity.ImageID},
+      		State = #{entity.State},
+      		processID = #{entity.processID},
+      		progress = #{entity.progress},
+      		SaleLogTypeCode=#{entity.SaleLogTypeCode},
+      		CreateTime=#{entity.CreateTime},
+      		SaleLogName=#{entity.SaleLogName},
+      		Receivableamount=#{entity.Receivableamount},
+      		OfferorsID=#{entity.OfferorsID}
+      	]]>
+      	<where>
+      		<if test="condition != null">
+      			${condition}
+      		</if>
+      	</where>  		
+	</update>	
+	
+	<update id="updatePropByID">
+		<![CDATA[  
+			update  saleLog set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	ID = #{id}
+        </where>
+	</update>	
+	
+	<update id="updatePropByCondition">
+		<![CDATA[  
+			update  saleLog set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</update>	
+	
+   <delete id="deleteByID"  parameterType="string">
+		<![CDATA[   
+			delete from saleLog   
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</delete>	
+	
+	<delete id="deleteByCondition"  parameterType="string">
+		<![CDATA[   
+			delete from saleLog  
+		]]>
+		<where>
+			<if test="condition != null">
+				${condition}
+			</if>	
+		</where>	
+	</delete>	
+	
+	<delete id="deleteEntities"  parameterType="string">
+		<![CDATA[   
+			delete from saleLog    
+		]]>
+		<where>
+			 ID in
+			 <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+          		#{item}
+        	</foreach>
+		</where>	
+	</delete>
+	
+	
+	<select id="getByID" resultType="com.cqut.entity.SaleLog.SaleLog">
+		<![CDATA[   
+			select * from saleLog 
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</select>
+	
+	<select id="getByCondition" resultType="com.cqut.entity.SaleLog.SaleLog">
+		<![CDATA[   
+			select * from saleLog 
+		]]>
+		<where>
+			<if test="condition != null">
+		 		${condition}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="findByID" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from saleLog 
+        <where>
+        	ID = #{id}
+        </where>
+	</select>	
+	
+	
+	<select id="findByCondition" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from saleLog 
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</select>		
+	
+		
+	<select id="getCountByCondition" resultType="int">
+		select count(distinct ID) from saleLog
+		<where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>	
+        </where>
+	</select>	
+</mapper>

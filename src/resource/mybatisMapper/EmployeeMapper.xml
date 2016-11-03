@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqut.dao.employee.EmployeeDao">
+ 
+    <insert id="save" parameterType="com.cqut.entity.employee.Employee">  
+     <![CDATA[   
+         insert into  employee ( ID, employeeName, accounts, sex, companyID, departmentID, headPhoto, dutiesID, IDcard, joinTime, createTime, phoneNumber, address, wechat, eMail, attentionState, remarks)
+         values(#{ID}, #{employeeName}, #{accounts}, #{sex}, #{companyID}, #{departmentID}, #{headPhoto}, #{dutiesID}, #{IDcard}, #{joinTime}, #{createTime}, #{phoneNumber}, #{address}, #{wechat}, #{eMail}, #{attentionState}, #{remarks})	
+     ]]>   
+    </insert>
+  
+    
+    <!--  mysql -->
+    <insert id="saveEntities"> 
+	 	 <![CDATA[  
+	    	insert into employee ( ID, employeeName, accounts, sex, companyID, departmentID, headPhoto, dutiesID, IDcard, joinTime, createTime, phoneNumber, address, wechat, eMail, attentionState, remarks) VALUES 
+	    ]]>  
+	    <foreach collection="entities" item="item" index="index" separator=",">   
+	         ( #{item.ID}, #{item.employeeName}, #{item.accounts}, #{item.sex}, #{item.companyID}, #{item.departmentID}, #{item.headPhoto}, #{item.dutiesID}, #{item.IDcard}, #{item.joinTime}, #{item.createTime}, #{item.phoneNumber}, #{item.address}, #{item.wechat}, #{item.eMail}, #{item.attentionState}, #{item.remarks})
+	    </foreach> 
+	</insert> 
+	
+	
+	<update id="updateByID" >
+		<![CDATA[  
+			update employee set 	
+      		employeeName = #{entity.employeeName},
+      		accounts = #{entity.accounts},
+      		sex = #{entity.sex},
+      		companyID = #{entity.companyID},
+      		departmentID = #{entity.departmentID},
+      		headPhoto = #{entity.headPhoto},
+      		dutiesID = #{entity.dutiesID},
+      		IDcard = #{entity.IDcard},
+      		joinTime = #{entity.joinTime},
+      		createTime = #{entity.createTime},
+      		phoneNumber = #{entity.phoneNumber},
+      		address = #{entity.address},
+      		wechat = #{entity.wechat},
+      		eMail = #{entity.eMail},
+      		attentionState = #{entity.attentionState},
+      		remarks = #{entity.remarks}
+      	]]>
+      	<where>
+      		ID = #{id}
+      	</where>  		
+	</update>
+		
+		
+	<update id="updateByCondition">
+		<![CDATA[  
+			update employee set 	
+      		employeeName = #{entity.employeeName},
+      		accounts = #{entity.accounts},
+      		sex = #{entity.sex},
+      		companyID = #{entity.companyID},
+      		departmentID = #{entity.departmentID},
+      		headPhoto = #{entity.headPhoto},
+      		dutiesID = #{entity.dutiesID},
+      		IDcard = #{entity.IDcard},
+      		joinTime = #{entity.joinTime},
+      		createTime = #{entity.createTime},
+      		phoneNumber = #{entity.phoneNumber},
+      		address = #{entity.address},
+      		wechat = #{entity.wechat},
+      		eMail = #{entity.eMail},
+      		attentionState = #{entity.attentionState},
+      		remarks = #{entity.remarks}
+      	]]>
+      	<where>
+      		<if test="condition != null">
+      			${condition}
+      		</if>
+      	</where>  		
+	</update>	
+	
+	<update id="updatePropByID">
+		<![CDATA[  
+			update  employee set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	ID = #{id}
+        </where>
+	</update>	
+	
+	<update id="updatePropByCondition">
+		<![CDATA[  
+			update  employee set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</update>	
+	
+   <delete id="deleteByID"  parameterType="string">
+		<![CDATA[   
+			delete from employee   
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</delete>	
+	
+	<delete id="deleteByCondition"  parameterType="string">
+		<![CDATA[   
+			delete from employee  
+		]]>
+		<where>
+			<if test="condition != null">
+				${condition}
+			</if>	
+		</where>	
+	</delete>	
+	
+	<delete id="deleteEntities"  parameterType="string">
+		<![CDATA[   
+			delete from employee    
+		]]>
+		<where>
+			 ID in
+			 <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+          		#{item}
+        	</foreach>
+		</where>	
+	</delete>
+	
+	
+	<select id="getByID" resultType="com.cqut.entity.employee.Employee">
+		<![CDATA[   
+			select * from employee 
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</select>
+	
+	<select id="getByCondition" resultType="com.cqut.entity.employee.Employee">
+		<![CDATA[   
+			select * from employee 
+		]]>
+		<where>
+			<if test="condition != null">
+		 		${condition}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="findByID" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from employee 
+        <where>
+        	ID = #{id}
+        </where>
+	</select>	
+	
+	
+	<select id="findByCondition" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from employee 
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</select>		
+	
+		
+	<select id="getCountByCondition" resultType="int">
+		select count(distinct ID) from employee
+		<where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>	
+        </where>
+	</select>	
+</mapper>

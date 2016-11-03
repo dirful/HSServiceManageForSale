@@ -1,0 +1,44 @@
+package com.cqut.service.Templet;
+
+
+import java.io.Console;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import com.cqut.service.search.SearchService;
+import com.cqut.tool.util.BeanUtil;
+import com.cqut.tool.util.EntityIDFactory;
+
+import  com.cqut.dao.Templet.TempletDao;
+import  com.cqut.entity.Templet.Templet;
+
+@Service
+public class TempletService extends SearchService implements ITempletService{
+	
+	@Resource(name="templetDao")
+	TempletDao dao ;
+
+	@Override
+	public String getBaseEntityName() {
+		return "templet";
+	}
+
+	@Override
+	public String getBasePrimaryKey() {
+		return "templet.ID";
+	}
+	
+	//保存模板str0
+	@Override
+	public int getstr0(String str0,String str1){
+		String id=BeanUtil.createId();
+		Templet data=new Templet();
+		data.setID(id);
+        data.setStr0(str0);
+        data.setStr1(str1);
+     return dao.save(data);
+	}
+	
+}

@@ -1,0 +1,60 @@
+*{
+    margin:0px;
+}
+input[type="button"], input[type="submit"], input[type="reset"] {
+
+-webkit-appearance: none;
+
+}
+
+textarea {  -webkit-appearance: none;}
+#day{
+    background:rgba(230,227,231,1);
+    margin:10px;
+    padding:10px;
+}
+.day{
+    background:rgba(200,199,200,1);
+   	flex:1;
+    text-align: center;
+    height:30px;
+    line-height: 30px;
+}
+.noday{
+    background:rgba(230,227,231,1);
+    color:#fff;
+    flex:1;
+    height:30px;
+    line-height: 30px;
+    text-align: center;
+}
+#top{
+    display: -webkit-flex;
+    width: 100%;
+    margin:0px 10px -10px 0px;
+}
+#top>div{
+    flex:1;
+    text-align: center;
+    width:23px;
+    display:-webkit-flex;
+}
+#top>div>div{
+    flex:1;
+    text-align: center;
+    width:23px;
+}
+#date{
+    background:linear-gradient(to bottom, #ededed 5%, #f5f5f5 100%);
+    width:100%;
+    background-color:#ededed;
+    position: fixed;
+    z-index: 9999;
+    bottom:60px;
+}
+.changeTime{
+    border:1px #fff solid;
+}
+.line{
+	display:-webkit-flex;
+}

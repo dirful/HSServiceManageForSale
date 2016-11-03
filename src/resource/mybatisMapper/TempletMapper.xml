@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqut.dao.Templet.TempletDao">
+ 
+    <insert id="save" parameterType="com.cqut.entity.Templet.Templet">  
+     <![CDATA[   
+         insert into  templet ( ID, templetCode, templetName, companyID, configurePath, templetType, description, createTime, state, str0, str1,type)
+         values(#{ID}, #{templetCode}, #{templetName}, #{companyID}, #{configurePath}, #{templetType}, #{description}, #{createTime}, #{state}, #{str0}, #{str1},#{type})	
+     ]]>   
+    </insert>
+  
+    
+    <!--  mysql -->
+    <insert id="saveEntities"> 
+	 	 <![CDATA[  
+	    	insert into templet ( ID, templetCode, templetName, companyID, configurePath, templetType, description, createTime, state, str0, str1,type) VALUES 
+	    ]]>  
+	    <foreach collection="entities" item="item" index="index" separator=",">   
+	         ( #{item.ID}, #{item.templetCode}, #{item.templetName}, #{item.companyID}, #{item.configurePath}, #{item.templetType}, #{item.description}, #{item.createTime}, #{item.state}, #{item.str0}, #{item.str1},#{item.type})
+	    </foreach> 
+	</insert> 
+	
+	
+	<update id="updateByID" >
+		<![CDATA[  
+			update templet set 	
+      		templetCode = #{entity.templetCode},
+      		templetName = #{entity.templetName},
+      		companyID = #{entity.companyID},
+      		configurePath = #{entity.configurePath},
+      		templetType = #{entity.templetType},
+      		description = #{entity.description},
+      		createTime = #{entity.createTime},
+      		state = #{entity.state},
+      		str0 = #{entity.str0},
+      		str1 = #{entity.str1},
+      		type = #{entity.type}
+      	]]>
+      	<where>
+      		ID = #{id}
+      	</where>  		
+	</update>
+		
+		
+	<update id="updateByCondition">
+		<![CDATA[  
+			update templet set 	
+      		templetCode = #{entity.templetCode},
+      		templetName = #{entity.templetName},
+      		companyID = #{entity.companyID},
+      		configurePath = #{entity.configurePath},
+      		templetType = #{entity.templetType},
+      		description = #{entity.description},
+      		createTime = #{entity.createTime},
+      		state = #{entity.state},
+      		str0 = #{entity.str0},
+      		str1 = #{entity.str1},
+      		type = #{entity.type}
+      	]]>
+      	<where>
+      		<if test="condition != null">
+      			${condition}
+      		</if>
+      	</where>  		
+	</update>	
+	
+	<update id="updatePropByID">
+		<![CDATA[  
+			update  templet set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	ID = #{id}
+        </where>
+	</update>	
+	
+	<update id="updatePropByCondition">
+		<![CDATA[  
+			update  templet set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</update>	
+	
+   <delete id="deleteByID"  parameterType="string">
+		<![CDATA[   
+			delete from templet   
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</delete>	
+	
+	<delete id="deleteByCondition"  parameterType="string">
+		<![CDATA[   
+			delete from templet  
+		]]>
+		<where>
+			<if test="condition != null">
+				${condition}
+			</if>	
+		</where>	
+	</delete>	
+	
+	<delete id="deleteEntities"  parameterType="string">
+		<![CDATA[   
+			delete from templet    
+		]]>
+		<where>
+			 ID in
+			 <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+          		#{item}
+        	</foreach>
+		</where>	
+	</delete>
+	
+	
+	<select id="getByID" resultType="com.cqut.entity.Templet.Templet">
+		<![CDATA[   
+			select * from templet 
+		]]>
+		<where>
+			ID = #{ID}
+		</where>
+	</select>
+	
+	<select id="getByCondition" resultType="com.cqut.entity.Templet.Templet">
+		<![CDATA[   
+			select * from templet 
+		]]>
+		<where>
+			<if test="condition != null">
+		 		${condition}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="findByID" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from templet 
+        <where>
+        	ID = #{id}
+        </where>
+	</select>	
+	
+	
+	<select id="findByCondition" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from templet 
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</select>		
+	
+		
+	<select id="getCountByCondition" resultType="int">
+		select count(distinct ID) from templet
+		<where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>	
+        </where>
+	</select>	
+</mapper>

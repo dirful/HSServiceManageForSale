@@ -1,0 +1,62 @@
+$(function(){
+	$("#userName").append(user.name);
+	$.post("moduleController/getModuleByPermission.do",{},function(result){
+		var data = jQuery.parseJSON(result),
+			temp,
+			html= "";
+		
+		for(var i in data){
+			temp = data[i];
+			
+			html += "<a class='columns'  href='"+temp.URL+"' target='content'>>"+temp.MODULENAME+"</a>";
+		}
+		$("#items").append(html);
+	});
+	
+//	$.post("systemFileController/getPic.do",{ID : icon},function(data){
+//		if(data){
+//			$("#headPhoto").attr("src",data);
+//		}
+//	});
+	$("#exit").click(function(){
+		if(window.confirm("您确定要退出吗?")){
+			$.post("administratorController/logout.do",{},function(json){
+				window.location.href = "index.html";
+			});	
+		}
+	});
+	
+	$("#changePasswordElem").click(function(){
+		 var dialog=$.modalDialog({
+		  title:'修改密码',
+		  width:320,
+		  height:180,
+		  parameter:null,
+		  processType : "add",
+		  href:'module/jsp/userManagement/changePassword.jsp',
+		  buttons:[{
+			  text:'修改',
+			  iconCls:'icon-ok',
+			  handler:function(){
+				  var f=dialog.find('#userForm');
+				  f.form('submit',{
+					  url:'userController/changePassword.do',
+					  method :"POST",
+					  onSubmit:function(param){
+						  return f.form('validate');
+					  },
+					  success:function(result){
+						  dialog.dialog('close');
+						  if(result == "1"){
+							  alert("修改成功");
+						  }else{
+							  alert("修改失败");
+						  }
+					  }
+				  });
+			  }
+		  }]
+	   });
+	});
+	  
+});

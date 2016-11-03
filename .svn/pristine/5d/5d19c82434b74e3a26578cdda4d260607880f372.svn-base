@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>审批</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no">
+
+<script type="text/javascript"src="../../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="../../../frame/dist/dropload.js"></script>
+<script type="text/javascript" src="../../../module/tool/loadfile.js"></script>
+<script type="text/javascript" src="../js/audit.js"></script>
+<link rel="stylesheet" href="../../../frame/dist/dropload.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/audit.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/operation.css" type="text/css"></link>
+</head>
+<body load="loadingfuncion()">
+	<div id="backgound_div"></div>
+	<div id="approvaldetails">
+		<div id="ad_inside">
+			<div id="adi">
+				<div id="ad_of_1">
+					<div id="ad_content"></div>
+				</div>
+				<div id="ad_of_2">
+					<a id="ad_return" class="button" onclick="ad_return()">返回</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="resultdetails">
+		<div id="rd_inside">
+			<div id="rdi">
+				<div id="rd_of_1">
+					<div id="rd_content">
+						<textarea id="rd_content_textarea"></textarea>
+					</div>
+				</div>
+				<div id="rd_of_2">
+					<a id="rd_determine" class="button" onclick="rd_determine()">确定</a>
+					<a id="rd_cancel" class="button" onclick="cancel()">取消</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="auditprompt">
+		<a class="ap_inside"> </a>
+	</div>
+	<div id="loading">
+		<div id="loading_side">
+			<a id="ls_f">正在载入</a> <a id="ls_s"></a>
+		</div>
+	</div>
+	<div id="head">
+		<div class="head_part head_activity" onclick="change_number(1)">我审核
+		</div>
+		<div class="head_part" onclick="change_number(2)">已审核</div>
+		<div class="head_part" style="border-right: none;"
+			onclick="change_number(3)">待审核</div>
+	</div>
+	<div id="head_choose">
+		<div class="head_part head_choose_list head_activity" onclick="change_type(1)">报价单</div>
+		<div class="head_part head_choose_list" style="border-right:none" onclick="change_type(2)" >销售单</div>
+	</div>
+	<div id="center">
+		<div id="center_part">
+			<ul id="auditlist">
+			</ul>
+		</div>
+	</div>
+	<div class="inner"></div>
+	<!--     审核人列表 -->
+    <div id="choose_examine_user_list" style="display:none;">
+        <div class="choose_examine_user_list_fixed" style="top:0px;"><span id="choose_examine_user_list_title">审核人</span><span id="choose_examine_user_list_close" onclick="close_this(7)">+</span></div>
+        <div id="choose_examine_user_li">
+            <li><input type="radio" name="examine_user" value="a1">&nbsp;常景胜&nbsp;</li>
+            <li><input type="radio" name="examine_user" value="a1">&nbsp;杨凯&nbsp;</li>
+            <li><input type="radio" name="examine_user" value="a2">&nbsp;孙进稳&nbsp;</li>
+            <li><input type="radio" name="examine_user" value="a3">&nbsp;鹏鹏&nbsp;</li>
+            <li><input type="radio" name="examine_user" value="a4">&nbsp;刘仕省&nbsp;</li>
+            <li><input type="radio" name="examine_user" value="a5">&nbsp;吴孝利&nbsp;</li>
+        </div>
+        <div class="choose_examine_user_list_fixed" style="bottom:0px;" onclick="openTheExamineUserList('2')"><span id="choose_examine_user_list_title">确定</span></div>
+    </div>
+    <!-- 详情页面 -->
+    <div id="operation_background" style="display:none;">
+        <div id="operation_box">
+            <div ><span>提交人：</span><span id="operation_user"> 常景胜</span></div>
+            <div ><span>报价单名称：</span><span id="operation_name">关于工业革命的历史</span></div>
+            <div ><span>总金额：</span><span id="operation_price">99999.43￥</span></div>
+            <div ><span>提交时间：</span><span id="operation_time">1995-02-07</span></div>
+            <div id="choose_examine_user_titile"><span>选择审核人</span></div>
+            <div id="choose_examine_user" onclick="openTheExamineUserList('1')" theCheckUserID="111" style="color:#acacac;">111</div>
+            <div>状态：<span style="color:red; font-size:6px;"></span></div>
+            <div id="reason"  maxlength="1000"  type="text"></div>
+            <div id="choose_examine" style="margin-bottom:5px; ">
+            <div id="operation_submit_box"><submit id="across_this" ><span>通过</span></submit><submit id="throw_this" ><span>抄送</span></submit><submit id="feedback" ><span>驳回</span></submit><submit onclick="close_this(1)"><span>取消</span></submit></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/opera.js"></script>
+</body>
+</html>

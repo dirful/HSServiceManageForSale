@@ -1,0 +1,13 @@
+package com.cqut.service.Process;
+
+import java.util.List;
+import java.util.Map;
+
+import com.cqut.entity.Process.Process;
+
+
+public interface IProcessService {
+
+	List<Map<String, Object>> getprocessID(String ID);
+	int savaprocess(Process process);
+}

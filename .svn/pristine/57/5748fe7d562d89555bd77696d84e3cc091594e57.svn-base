@@ -1,0 +1,65 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>编辑销售日志</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<link rel="stylesheet" type="text/css" href="frame/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="frame/easyui/themes/icon.css">  
+	<script type="text/javascript" src="frame/extUtil.js"></script>
+	<script  src="frame/easyui/validata.js"></script>
+	<script  src="frame/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script  src="frame/easyui/extEasyUI.js"></script>
+	<script  src="frame/easyui/jquery.min.js"></script>
+	<script  src="frame/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="frame/easyui/extEasyUI.js"></script>
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+	    <script language="javascript" type="text/javascript" src="frame/fileupload/jquery.ui.widget.js"></script>
+		<script language="javascript" type="text/javascript" src="frame/fileupload/jquery.iframe-transport.js"></script>
+		<script language="javascript" type="text/javascript" src="frame/fileupload/jquery.fileupload.js"></script>   
+	<style type="text/css">
+	#top{
+		height:40px;
+		background-color:#F5F5F5;
+		border:1px solid #B7B7B7;
+		margin-bottom:1%}
+	.back{margin:10px;}
+	.back2{margin-right:8px;}
+	</style>
+  </head>
+  
+  <body>
+ <!-- <div id="top">
+       <a href="module/ProjectSubjectManagement/jsp/ProjectSubjectManagement.jsp"><button class="back">返回</button></a>
+     <a style="float:right">
+       <button class="back">取消</button>
+       <button class="back">保存</button>
+     </a>
+   </div> -->
+   <div id="dataGrid">
+    <table id="dg" toolbar="#toolbar">
+		</table>
+		 <div id="toolbar">
+	        <a class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editer()">编辑</a>
+	        <a class="easyui-linkbutton" iconCls="icon-remove" plain="true"onclick="removable()">删除</a>
+	        <a class="easyui-linkbutton" iconCls="icon-next" plain="true" onclick="next()">进入下级</a>
+	        <a class="easyui-linkbutton" iconCls="icon-prev" plain="true" onclick="prev()">进入上级</a>
+	    	<a class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="allRole()">刷新</a>
+	     </div>
+	</div>
+   <script type="text/javascript" src="module/ProjectSubjectManagement/js/editSaleLog.js"></script>
+  </body>
+</html>

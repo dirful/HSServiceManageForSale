@@ -1,0 +1,48 @@
+package com.cqut.service.permission;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import com.cqut.service.search.SearchService;
+import com.cqut.tool.treeNode.Node;
+import com.cqut.tool.treeNode.NodeList;
+
+import com.cqut.dao.permission.PermissionDao;
+import com.cqut.entity.permission.Permission;
+
+@Service
+public class PermissionService extends SearchService implements IPermissionService{
+	
+	@Resource(name="permissionDao")
+	PermissionDao dao ;
+
+	@Override
+	public String getBaseEntityName() {
+		return "permission";
+	}
+
+	@Override
+	public String getBasePrimaryKey() {
+		return "permission.ID";
+	}
+	
+	@Override
+	public List<Permission> getPermissionByCondition(String condition){
+		return dao.getByCondition(condition);
+	}
+	
+	@Override
+	public NodeList getPermissionTree() {
+		List<Permission> allPermission = this.getPermissionByCondition("1=1");
+		NodeList nodeTree = new NodeList();
+		Node root = new Node("全部角色", "", true);
+		nodeTree.addNode(root);
+		for (Permission p : allPermission) {
+			Node node = new Node(p.getNAME(), p.getID());
+			node.addAttr("hasChild", 0);
+			root.addChildren(node,true);
+		}
+		return nodeTree;
+	}
+}

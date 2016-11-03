@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>审批</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no">
+
+<script type="text/javascript"src="../../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="../../../frame/dist/dropload.js"></script>
+<script type="text/javascript" src="../../../module/tool/loadfile.js"></script>
+<script type="text/javascript" src="../js/audit.js"></script>
+<link rel="stylesheet" href="../../../frame/dist/dropload.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/audit.css" type="text/css"></link>
+</head>
+<body load="loadingfuncion()">
+	<div id="backgound_div"></div>
+	<div id="approvaldetails">
+		<div id="ad_inside">
+			<div id="adi">
+				<div id="ad_of_1">
+					<div id="ad_content"></div>
+				</div>
+				<div id="ad_of_2">
+					<a id="ad_return" class="button" onclick="ad_return()">返回</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="resultdetails">
+		<div id="rd_inside">
+			<div id="rdi">
+				<div id="rd_of_1">
+					<div id="rd_content">
+						<textarea id="rd_content_textarea"></textarea>
+					</div>
+				</div>
+				<div id="rd_of_2">
+					<a id="rd_determine" class="button" onclick="rd_determine()">确定</a>
+					<a id="rd_cancel" class="button" onclick="cancel()">取消</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="auditprompt">
+		<a class="ap_inside"> </a>
+	</div>
+	<div id="loading">
+		<div id="loading_side">
+			<a id="ls_f">正在载入</a> <a id="ls_s"></a>
+		</div>
+	</div>
+	<div id="head">
+		<div class="head_part head_activity" onclick="loadaudit(1)">我审核
+		</div>
+		<div class="head_part" onclick="loadaudit(2)">已审核</div>
+		<div class="head_part" style="border-right: none;"
+			onclick="loadaudit(3)">待审核</div>
+	</div>
+	<div id="center">
+		<div id="center_part">
+			<ul id="auditlist">
+			</ul>
+		</div>
+	</div>
+	<div class="inner"></div>
+</body>
+</html>

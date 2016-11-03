@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>西南计算机有限责任公司</title>
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<link rel="stylesheet" type="text/css" href="module/index/index.css">
+		
+		<!-- <script type="text/javascript" src="frame/easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="module/index/index.js"></script> -->
+		<script type="text/javascript" src="frame/easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="module/index/index.js"></script>
+	
+	<body>
+	
+	<div id="login">
+		<div id="login-area">
+			<div id="login-tit"></div>
+			<div id="login-bg">
+				<b id="login-bg1"></b>
+				<b id="login-bg2"></b>
+				<b id="login-bg3"></b>
+				<b id="login-bg4"></b>
+			</div>
+			<div id="login-inner">
+				<div id="userImg"><img src="img/login/login_user.png"></div>
+				<p id="error-info"></p>
+				<form id="login-form" class="loginFormDiv">
+					<input placeholder="请输入账号" id="loginName"/><br>
+					<input placeholder="请输入密码" id="password" type="password"/><br>
+					<button id="loginBut" type="button">登录</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

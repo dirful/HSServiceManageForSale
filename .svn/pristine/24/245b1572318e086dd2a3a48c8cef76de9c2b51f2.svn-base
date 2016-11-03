@@ -1,0 +1,23 @@
+<!DOCTYPE html >
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增</title>
+ <meta name="viewport" content="width=device=width,initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+<link rel="stylesheet" href="css/ProjectSubjectManagement.css" type="text/css"></link>
+</head>
+<body>
+<div id="hidden">
+	<div class="inner" id="CONTACT"><div >联系人</div>
+		<div class="DataContent">
+			 <span id="PEOPLE"> </span>
+		</div>   
+	</div>
+	<div id='contactID'>
+	</div>
+	<button id="submit">确定</button>		             
+</div>
+<script type="text/javascript" src="../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="js/ProjectSubjectManagementSaleLogType.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新增</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width = device-width ,initial-scale = 1.0 , minimum-scale = 1.0 , user-scalable =  no ">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="stylesheet" type="text/css"
+	href="../css/NewProjectInformation.css">
+
+<script type="text/javascript" src="../../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="../js/NewProjectInformation.js"></script>
+<script type="text/javascript" src="../../../frame/ajaxfileupload.js"></script>
+
+</head>
+
+<body>
+	<div id="hah">
+		<div id="operate">
+			<img class="return" src="../img/back4.png"></img>
+			<img class="delete" src="../img/delete4.png" style="display:block"></img>
+		</div>
+		<div class="background1"></div>
+	</div>
+	<div class="nav">
+		<div id="btn1">选择项目信息模板</div>
+		<div id="btn2">填报项目信息</div>
+	</div>
+
+	<div class="data_box" id="box1" style="display:none">
+		<div class="data_row" id="bigClass">
+			所属大类
+			<div class="data"></div>
+		</div>
+		<div class="data_row" id="subclass">
+			所属小类
+			<div class="data"></div>
+		</div>
+		<div class="data_row" id="templetName">
+			日志模板
+			<div class="data"></div>
+		</div>
+
+		<div class="submit">
+			<input id="submit1" type="button" value="下一步">
+		</div>
+	</div>
+
+	<div class="data_box" id="box_bigClass" style="display:none"></div>
+
+	<div class="data_box" id="box_subclass" style="display:none"></div>
+
+	<div class="data_box" id="box_templetName" style="display:none"></div>
+	
+	
+	<!-- style="display:none" -->
+	<div class="data_box" id="box2" >
+		<div class="data_row" id="projectName">
+			项目名称
+			<input type="text" class="data_input" id="projectNameInput" />
+		</div>
+		<div class="data_row" id="remarks" style="height:90px">
+			项目描述
+			<textarea class="data_area" id="remarksInput"></textarea>
+		</div>
+		<div class="data_row" id="leaderID">
+			项目负责人
+			<input type="text" class="data_input" id="leaderIDInput" />
+		</div>
+		<div class="data_row" id="consumerWorkPlace">
+			客户姓名
+			<input type="text" class="data_input" id="consumerWorkPlaceInput" />
+		</div>
+		<div class="data_row" id="contactsName">
+			联系人
+			<input type="text" class="data_input" id="contactsNameInput" />
+		</div>
+		<div class="data_row" id="progress" style="height:90px">
+			项目进展
+			<textarea class="data_area" id="progressInput" ></textarea>
+		</div>
+		<div class="data_row" id="receiveManSelect">
+			接收人
+			<select id="department">
+			</select>
+			<select id="employee">
+			</select>
+			<input type="button" id="addReceiveMan" value="添加">
+		</div>
+		<div class="data_row_select" id="receiveMan" >
+		</div>
+		
+		<div class="row" id="photos">
+			<img id="imghead" class="photoAdd" src="../img/xinzeng.jpg" onclick="openBrowse()"></img>
+				<form id="form1" method="post" enctype="multipart/form- data">
+					<input id="upload" name="upload" type="file"
+						accept="image/png, image/gif, image/jpg, image/jpeg"
+						onchange="previewImage(this)" style="display: none">
+				</form>
+				<div class="fitem picID">
+					<div class="formLabel" style="display:none">
+						<label>图片ID:</label>
+					</div>
+					<div class="formInput" style="display:none">
+						<input id="picID" name="picID">
+					</div>
+				</div>
+			</div>
+		
+		<div class="submit">
+			<input id="submit2" type="button" value="提交">
+		</div>
+	</div>
+	
+</body>
+</html>

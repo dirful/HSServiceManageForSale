@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>报价统计</title>
+	<meta name="format-detection" content="telephone=no">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="css/sj.css" type="text/css"></link>
+  	<link rel="stylesheet" href="css/quoInfoManaSt.css" type="text/css"></link>
+  	</head> 
+  <body>
+ <!--图标插件-->
+  	<div id="container" style="min-width:100px;height:400px;left:-10px;margin-bottom:80px"></div>
+<!-- 底部日期选择框 -->
+	<div id="postDate"><a>发送</a></div>
+	<div id="myChoose">
+	</div>
+<!-- 	<div id="between"> -->
+<!--   	<div id="timeB" role="director"></div><div id="timeA"  role="director"></div> -->
+<!--   	</div> -->
+	<!--选择查询模式 -->
+  	<div id="bottom">
+  		<!--日期选择·-->
+  		<div id="date" role="shower">
+  			<div id="yearOK" class="OK"><a>确定</a></div>
+  			<div id="monthOK" class="OK"><a>确定</a></div>
+  		</div>
+  		<div id="cy" class="changeMode"><a >年</a></div>
+  		<div id="cm" class="changeMode"><a >月</a></div>
+  		<div id="cw" class="changeMode"><a >周</a></div>
+  		<div id="cd" class="changeMode"><a >日</a></div>
+  	</div>
+  	<script type="text/javascript" src="../../frame/jquery/jquery-2.1.0.js"></script>
+  	<!--自编时间控件js-->
+  	<script type="text/javascript" src="js/sj.js"></script>
+	<!--表格插件js-->
+	<script type="text/javascript" src="js/highcharts.js"></script>
+	<script type="text/javascript" src="js/exporting.js"></script>
+	<!--引用插件-->
+  	<script type="text/javascript" src="js/quoInfoManaSt.js"></script>
+  </body>
+</html>
+
+
+

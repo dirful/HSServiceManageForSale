@@ -1,0 +1,73 @@
+package com.cqut.service.Templet;
+
+
+import java.io.Console;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import com.cqut.service.search.SearchService;
+import com.cqut.tool.util.BeanUtil;
+import com.cqut.tool.util.EntityIDFactory;
+
+import  com.cqut.dao.Templet.TempletDao;
+import  com.cqut.entity.Templet.Templet;
+
+@Service
+public class TempletService extends SearchService implements ITempletService{
+	
+	@Resource(name="templetDao")
+	TempletDao dao ;
+
+	@Override
+	public String getBaseEntityName() {
+		return "templet";
+	}
+
+	@Override
+	public String getBasePrimaryKey() {
+		return "templet.ID";
+	}
+
+	//获得模板str0
+	@Override
+	public 	List<Map<String, Object>> getstr(String conditions){
+	  String condition="templet.str0 = "+conditions+"";
+	
+		String [] properties ={
+				" templet.str0 ",
+				" templet.templetName ",
+				" templet.ID "
+};
+		String baseEntity = " templet ";
+		String joinEntity="LEFT JOIN type as child ON child.ID=templet.str1";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties, baseEntity, joinEntity, null, condition, false);	
+
+         return list;
+	}
+	/*
+	 * wxl 查询服务消息模板(non-Javadoc)
+	 * @see com.cqut.service.Templet.ITempletService#getServiceMessageTenplet(java.lang.String)
+	 */
+		@Override
+		public List<Map<String, Object>> getServiceMessageTemplet(int rows, int page, String order, String sort, String condition) {
+			String properties []={"templet.ID",
+								  "templet.templetCode AS TECODE",
+								  "templet.templetName AS TENAME",
+							 	  "DATE_FORMAT(templet.createTime,'%Y-%m-%d %H:%i:%s') AS CREATETIME",
+								  "templet.description as DESCRIPTION"
+								};
+			String baseEntity = "templet";
+			List<Map<String, Object>> list =this.originalSearchWithpaging(properties, baseEntity, " ", null, condition, false, null, getBasePrimaryKey(), sort, rows,page);
+			return list;
+		}
+	/*
+	 * wxl 删除服务消息模板(non-Javadoc)
+	 * @see com.cqut.service.Templet.ITempletService#deleteServiceTemplet(java.lang.String)
+	 */
+		@Override
+		public int deleteServiceTemplet(String ID) {
+			return dao.deleteByID(ID);
+		}
+}

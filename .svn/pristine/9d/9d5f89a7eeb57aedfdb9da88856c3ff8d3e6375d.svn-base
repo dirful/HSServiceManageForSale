@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>moduleActivityl</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<!-- <link rel="stylesheet" type="text/css"
+	href="frame/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="frame/easyui/themes/icon.css">
+<script src="frame/easyui/jquery.min.js"></script>
+<script src="frame/easyui/jquery.easyui.min.js"></script>
+<script src="frame/easyui/locale/easyui-lang-zh_CN.js"></script> -->
+</head>
+<style>
+.formLabel {
+	width: 100px;
+	text-align: right;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+}
+
+.formInput {
+	padding: 0 5px;
+	text-align: left;
+	float: left;
+	height: 20px;
+}
+
+#dlg {
+	margin-top: 20px;
+}
+
+.fitem {
+	margin-bottom: 10px;
+}
+
+.requiredMark {
+	color: red
+}
+</style>
+<div id="dlg">
+	<form id="fm" method="post">
+		<input name="MODULEID" id="MODULEID" style="display: none;" /> <input
+			name="PARENT" id="PARENT" style="display: none;" /><input
+			name="LEVEL0" id="LEVEL0" style="display: none;" />
+		<div class="fitem">
+			<div class="formLabel">
+				<label>模版名:</label>
+			</div>
+			<div class="formInput">
+				<input name="MODULENAME" id="MODULENAME" class="easyui-validatebox"
+					required="true" style="width: 200px" /><span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>URL:</label>
+			</div>
+			<div class="formInput" style="height: 50px;">
+				<textarea name="URL" id="URL" class="easyui-validatebox"
+					style="width: 198px;height: 50px;" />
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>是否展示:</label>
+			</div>
+			<div class="formInput">
+				<section class="easyui-combobox" id="SHOWMENUPAGE"
+					name="SHOWMENUPAGE" style="width: 204px;" panelHeight="42">
+					<option value="1">展示</option>
+					<option value="0">不展示</option>
+				</section>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var f = $("#fm");
+		var parameter = $.dialogParameter();
+		if ($.dialogParameter()) {
+			if ($.processType() == "add") {
+				$("#PARENT").val(parameter.PageData.PARENTID);
+				$("#LEVEL0").val(parameter.PageData.LEVEL0);
+			}
+			if ($.processType() == "edit") {
+				f.form('load', parameter);
+				$("#SHOWMENUPAGE").val(parameter.SHOWMENUPAGE);
+			}
+		}
+	});
+</script>
+<body>
+</html>

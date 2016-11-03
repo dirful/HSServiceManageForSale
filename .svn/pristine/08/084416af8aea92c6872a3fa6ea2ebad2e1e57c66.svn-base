@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新增/编辑角色</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../frame/jquery/jquery-2.1.0.js"></script>
+</head>
+<body>
+<style>
+.formLabel {
+	width: 100px;
+	text-align: right;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+}
+
+.formInput {
+	padding: 0 5px;
+	text-align: left;
+	float: left;
+	height: 20px;
+}
+
+#dlg {
+	margin-top: 20px;
+}
+
+.fitem {
+	margin-bottom: 10px;
+}
+
+.requiredMark {
+	color: red
+}
+</style>
+<div id="dlg">
+	<form id="fm" method="post">
+		<input name="ID" id="ID" style="display: none;"/>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>名称:</label>
+			</div>
+			<div class="formInput">
+				<input name="NAME" id="NAME" class="easyui-validatebox"
+					required="true"/><span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>登录名:</label>
+			</div>
+			<div class="formInput">
+				<input name="LOGINNAME" id="LOGINNAME" class="easyui-validatebox"
+					required="true"/><span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem dpassword" >
+			<div class="formLabel">
+				<label>密码:</label>
+			</div>
+			<div class="formInput">
+				<input name="PASSWORD" id="PASSWORD" class="easyui-validatebox" type="password"
+					required="true"/><span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem dpassword">
+			<div class="formLabel">
+				<label>再次输入密码:</label>
+			</div>
+			<div class="formInput">
+				<input name="REPASSWORD" id="REPASSWORD" class="easyui-validatebox" type="password"
+					required="true"/><span class="requiredMark">*</span><span id="passworderror" style="color: red;display: none;">您输入的密码不一致</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>角色名:</label>
+			</div>
+			<div class="formInput">
+				<section name="PERMISSIONID" id="PERMISSIONID" class="easyui-combobox" required="true" style="width: 153px" panelHeight="42">
+				</section>
+				<span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>状态:</label>
+			</div>
+			<div class="formInput">
+				<section name="STATE" id="STATE" class="easyui-combobox" required="true" style="width: 153px" panelHeight="42">
+					<option value="1" >正常</option>
+					<option value="0" >禁用</option>
+				</section>
+				<span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$.post("permissionController/getPermissionByCondition.do",{},function(result){
+			var result = $.parseJSON(result);
+			var data=[];
+			for(var i = 0; i < result.length; i++){
+				data.push({ "value": result[i].ID, "text": result[i].NAME});
+			}
+			$("#PERMISSIONID").combobox('loadData',data);
+			/* var data1 = $("#PERMISSIONID").combobox('getData');
+            if (data1.length > 0) {
+                $("#PERMISSIONID").combobox('select', data1[0].text);
+            } */
+		});
+		var f = $("#fm");
+		var parameter = $.dialogParameter();
+		console.info(parameter);
+		if ($.dialogParameter()) {
+			if ($.processType() == "edit") {
+				/* $(".dpassword").hide(); */
+				/* $("#REPASSWORD").val(parameter.PASSWORD); */
+				/* $.post("administratorController/getAdministratorByID.do",{ID: ID}, function(result){
+					var result = $.parseJSON(result);
+					if(result.length != 1){
+						f.form('load', result[0]);
+					}
+				}); */
+				/* $("#PERMISSIONID").combobox('setValue',parameter.PERMISSIONID); */
+				$(".dpassword").remove();
+				$("#PERMISSIONID").val(parameter.PERMISSIONID);
+				$("#STATE").val(parameter.STATE);
+				f.form('load', parameter);
+			}
+		}
+	});
+</script>
+</body>
+</html>

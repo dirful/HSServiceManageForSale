@@ -1,0 +1,172 @@
+* {
+  outline: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+input[type="button"], input[type="submit"], input[type="reset"] {
+
+-webkit-appearance: none;
+
+}
+
+textarea {  -webkit-appearance: none;}
+body>div{
+	border:1px #000 solid;
+	margin:10px 5px;
+	background:#ececec;
+}
+div>div{
+	-webkit-box-align:center;
+	display: -moz-box;  /* Firefox */ 
+  	display: -ms-flexbox;    /* IE10 */ 
+ 	display: -webkit-box;    /* Safari */  
+  	display: -webkit-flex;    /* Chrome, WebKit */ 
+    display: box;  
+  	display: flexbox;  
+  	display: flex;
+  	display:inline-box;
+	height:40px;
+	width:100%;
+	-webkit-flex-direction:row-reverse;
+	flex-direction:row-reverse;
+	-webkit-box-direction:reverse;
+	-webkit-box-pack:end;
+}
+img{
+	display:block;
+	-webkit-align-self:center;
+	margin:0px 5px;
+	width:30px;
+	height:30px;
+}
+table{
+	width:100%;
+	height:215px;
+}
+tbody{
+	border:1px #000 solid ;
+	margin:0px 4px 10px 4px;
+	-webkit-flex-direction:column;
+	flex-direction:column;
+	display: -moz-box;  /* Firefox */ 
+  	display: -ms-flexbox;    /* IE10 */ 
+ 	display: -webkit-box;    /* Safari */  
+  	display: -webkit-flex;    /* Chrome, WebKit */ 
+    display: box;  
+  	display: flexbox;  
+  	display: flex;
+  	display:inline-box;
+	height:215px;
+	-webkit-box-orient:vertical;
+	
+}
+tr{
+	margin:1px 0px;
+	background:#fff;
+	width:100%;
+	display: -moz-box;  /* Firefox */ 
+  	display: -ms-flexbox;    /* IE10 */ 
+ 	display: -webkit-box;    /* Safari */  
+  	display: -webkit-flex;    /* Chrome, WebKit */ 
+    display: box;  
+  	display: flexbox;  
+  	display: flex;
+  	display:inline-box;
+  	-webkit-flex:1;
+	flex:1;
+	-webkit-justify-content:space-between;
+	-moz-box-flex:1; /* Firefox */
+	-webkit-box-flex:1; /* Safari 和 Chrome */
+	box-flex:1;
+	-webkit-box-pack:justify;
+	-webkit-box-align:center;
+}
+td{
+	display:block;
+	margin:0px 4px;
+	-webkit-align-self:center;
+}
+tr>td:nth-of-type(2){
+	color:#ccc;
+
+}
+/* 详情样式区 */
+#info{
+	z-index:999;
+	display:none;
+	position:fixed;
+	width: 90%;
+    height: 80%;
+    margin: 50px 5% 0% 5%;
+    overflow: auto;
+}
+
+.details{
+    display: -moz-box;  /* Firefox */ 
+    display: -ms-flexbox;    /* IE10 */ 
+    display: -webkit-box;    /* Safari */  
+    display: -webkit-flex;    /* Chrome, WebKit */ 
+    display: box;  
+    display: flexbox;  
+    display: flex;
+    display:inline-box;
+    height:initial;
+    border-bottom:1px #000 solid;
+    -webkit-justify-content:space-between;
+    justify-content:space-between;
+    -webkit-box-pack:justify;
+    -webkit-flex-direction:row;
+    flex-direction: row;
+    -webkit-box-direction:normal;
+}
+.details>div{
+	display: -moz-box;  /* Firefox */ 
+    display: -ms-flexbox;    /* IE10 */ 
+    display: -webkit-box;    /* Safari */  
+    display: -webkit-flex;    /* Chrome, WebKit */ 
+    display: box;  
+    display: flexbox;  
+    display: flex;
+    display:inline-box;
+	-webkit-justify-content:space-between;
+    justify-content:space-between;
+	height: 18px;
+    width: initial;
+    margin:5px 10px;
+
+	-webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+#detailsList{
+	overflow: auto;
+	display:block;
+	height:100px;
+	width: initial;
+    margin: 10px;
+    border:1px solid #000;
+    background: #ececec;
+}
+#detailsList>div{
+	height: 18px;
+    width: initial;
+    border-bottom: none;
+}
+#clickBack{
+	outline: 0;
+  	padding: 0;
+  	margin: 0;
+  	border: 0;
+  	margin-top:-10px;
+	display:none;
+	z-index:99;
+	position:fixed;
+	height:110%;
+	width:100%;
+	background:RGBA(55,55,55,0.3);
+}
+#noMore{
+	width:100%;
+	
+}

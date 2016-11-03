@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html >
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增</title>
+ <meta name="viewport" content="width=device=width,initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+<link rel="stylesheet" href="css/ProjectSubjectManagement.css" type="text/css"></link>
+</head>
+<body>
+<div  id="Display">
+       <div class="SaleLog">
+		   <div id="HomePage"> 
+		       <a class="SalelogTemp">销售日志模板 </a>
+		       <a class="SaleJourna">选择填写销售日志</a>
+		    </div>  
+	   </div>
+    <div id="write1">
+		   <div class="sale">
+			    <div class="inner" id="Big">
+			         <div >所属大类</div>
+			                <div class="DataContent"> 
+			                       <span id="Biginner"></span>
+			                            
+			                </div>
+		        </div>
+		         <div id='Control1'>
+			                  
+			               </div>
+		    <div class="inner" id="small">
+		         <div>所属小类</div>
+		               <div class="DataContent">
+                               <span id="smallinner"></span>
+		                           
+		               </div>     
+		    </div>
+		     <div id="Control2">
+		                  
+		                            </div>
+		    <div class="inner" id="Template">
+		         <div >日志模板</div>
+		              <div class="DataContent" >
+		                 <span id="Templateinner"></span>
+		              </div> 
+			            </div>
+			            <div id="Control3">
+			              </div>
+			<div  style="margin-left:5%;margin-top:10%">
+			    <input type="radio" name="process" checked="checked" id="auto"><span>默认审批流程</span>
+			    <input type="radio" name="process" style="margin-left:4%" id="custom"><span>自定义审批流程</span>
+		            
+			 </div>
+			     <div id="Control4">
+		
+			     </div>
+			  	 <div id="processes" style="position:fixed;text-align:center"></div>	
+		  </div><br/><br/>
+        <div class="Jump" id="next">下一步</div> <br/><br/><br/>
+     </div>
+    <div  id="write2">
+		 <div class="outside" style="border:solid 1px #B7B7B7;padding:0px 10px 10px 10px; background-color:#ECECEC;margin-top:30px">
+		     <div style="text-align:center;padding-top:20px">销售目标</div><br/>
+		        <div class="firstoutside" style="background:#FFFFFF">
+				     <div class="inner" ><div>任务量</div>
+				                <div class="DataContent" >
+				                            <input type="text" id="Assignments" class="same"></input>
+				                </div> 
+				      </div>
+				     <div class="inner"><div >签约量</div>
+				                <div class="DataContent">
+				                            <input type="text" id="ContractVolume" class="same"></input>
+				                </div> 
+				      </div>
+				    <div class="inner" style="border:none"><div >回款量</div>
+				                <div class="DataContent">
+				                            <input type="text" id="Receivableamount" class="same"></input>
+				                </div> 
+				    </div>
+			   </div>
+		   </div><br/>
+		    <div class="outside">
+		       <div style="text-align:center;padding-top:10px">过程采集</div><br/>
+		            <div class="firstoutside">
+		             <div class="inner" ><div>销售日志</div>
+				                <div class="DataContent">
+				                      <input type="text" id="SaleLogName" class="same"></input>
+				                </div>
+				          </div>
+				          <div class="inner" ><div>电话量</div>
+				                <div class="DataContent">
+				                      <input type="text" id="Phone" class="same"></input>
+				                </div>
+				          </div>
+				<div class="inner"><div >邮件量</div>
+				          <div class="DataContent">
+				                      <input type="text" id="Email" class="same"></input>
+				          </div> 
+				</div>
+				<div class="inner"><div >访问量</div>
+				          <div class="DataContent">
+				                    <input type="text" id="Visit" class="same"></input>
+				          </div> 
+				</div>
+				<div class="inner" style="border:none"><div >签单量</div>
+				        <div class="DataContent">
+				               <input type="text" id="List" class="same"></input>
+				        </div> 
+				</div>
+			         </div>
+		    </div><br/>
+ 
+		 <div class="outside">
+		     <div class="finally" align="right">
+					    <div style="text-align:center;padding-top:10px">拜访客户情况</div>
+			 </div><br/>
+		     <div class="firstoutside" style="background:#FFFFFF">
+				<div class="inner" > <div>客户姓名</div>
+				      <div class="DataContent" id="Contact">
+				              <input type="text" id="CustomerName" class="same"></input>
+				      </div>
+				</div>
+				 
+				 <div class="inner" id="ContactID"><div >联系人</div>
+					<div class="DataContent">
+				            <span id="people"> </span>
+				      </div>   
+				</div>
+				<div class="inner"><div >拜访目的</div>
+			         <div class="DataContent">
+				            <input type="text" id="Purpose" class="same"></input>
+				     </div> 
+				 </div>
+				<div class="inner"><div >拜访结果</div>
+				       <div class="DataContent">
+				            <input type="text" id="Results" class="same"></input>
+				       </div> 
+				</div>
+				<div class="inner"><div >拜访时间</div>
+				       <div class="DataContent">
+				              <input type="datetime-local" id="time" class="same">
+					   </div> 
+				 </div>
+				<div >商谈内容:</div>
+						<div style="margin-right:1%">
+						   <textarea  id="Contents" class="talk"></textarea>
+					    </div>
+			   </div>
+			</div>
+			     <br/><br/>
+	          <div  id="Submit"  class="Jump">提交</div>
+		     <br/><br/><br/>
+     </div>
+</div>
+<div id="hidden" style="top:10px">
+	<div class="inner" id="CONTACT"><div >联系人</div>
+		<div class="DataContent">
+			 <span id="PEOPLE"> </span>
+		</div>   
+	</div>
+	<div id='contactID'>
+	</div>
+	<div id="submit" class="Jump" style="margin-top:20px;">确定</div>		             
+</div>
+<script type="text/javascript" src="../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="js/ProjectSubjectManagementSaleLogType.js"></script>
+</body>
+</html>

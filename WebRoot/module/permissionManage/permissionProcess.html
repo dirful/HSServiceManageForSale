@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新增/编辑角色</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<style>
+.formLabel {
+	width: 100px;
+	text-align: right;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+}
+
+.formInput {
+	padding: 0 5px;
+	text-align: left;
+	float: left;
+	height: 20px;
+}
+
+#dlg {
+	margin-top: 20px;
+}
+
+.fitem {
+	margin-bottom: 10px;
+}
+
+.requiredMark {
+	color: red
+}
+</style>
+<div id="dlg">
+	<form id="fm" method="post">
+		<input name="ID" id="ID" style="display: none;"/>
+		<div class="fitem">
+			<div class="formLabel">
+				<label>角色名:</label>
+			</div>
+			<div class="formInput">
+				<input name="NAME" id="NAME" class="easyui-validatebox"
+					required="true"/><span class="requiredMark">*</span>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var f = $("#fm");
+		var parameter = $.dialogParameter();
+		if ($.dialogParameter()) {
+			if ($.processType() == "edit") {
+				f.form('load', parameter);
+			}
+		}
+	});
+</script>
+</body>
+</html>

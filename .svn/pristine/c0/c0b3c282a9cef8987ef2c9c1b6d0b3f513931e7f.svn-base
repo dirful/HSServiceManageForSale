@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ServiceMessageTemplet.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    <link rel="stylesheet" href="../../frame/easyui/themes/default/easyui.css" type="text/css"></link>
+	<link rel="stylesheet" href="../../frame/easyui/themes/icon.css" type="text/css"></link>
+ 
+  	<script type="text/javascript" src="../../frame/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="../../frame/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../frame/easyui/extEasyUI.js"></script>
+ 	<script type="text/javascript" src="../../frame/easyui/locale/easyui-lang-zh_CN.js"></script>
+    </head>
+
+<body>
+	<div class="content">
+		<div class="searchArea">
+			日期：从<input class="easyui-datetimebox textbox" id="FIRTIME" style="width:150px">
+			到<input class="easyui-datetimebox textbox" id="SECTIME" style="width:150px">
+			名称：<input class="easyui-validatebox textbox" id="TENAME" style="width:150px"> 
+			<a class="easyui-linkbutton" iconCls="icon-search" onclick="sear()">查询</a>
+		</div>
+		<table id="dg" toolbar="#toolbar" style="width:300px"></table>
+		<div id="toolbar">
+		<a class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addTemplet()">新建</a>
+		<a class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeTemplet()">删除</a>
+		<a class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editTemplet()">编辑</a>
+		<a class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reloadTemplet()">刷新</a>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="ServiceMessageTemplet.js"></script>
+</html>

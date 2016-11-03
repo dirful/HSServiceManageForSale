@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqut.dao.module.ModuleDao">
+ 
+    <insert id="save" parameterType="com.cqut.entity.module.Module">  
+     <![CDATA[   
+         insert into  module ( MODULEID, MODULENAME, URL, PARENT, ICON, HASCHILD, ISENDOFMODULELEVEL, LEVEL0, ISFOLDER, SHOWMENUPAGE, CHILDSHOWTYPE, MODULETYPE)
+         values(#{MODULEID}, #{MODULENAME}, #{URL}, #{PARENT}, #{ICON}, #{HASCHILD}, #{ISENDOFMODULELEVEL}, #{LEVEL0}, #{ISFOLDER}, #{SHOWMENUPAGE}, #{CHILDSHOWTYPE}, #{MODULETYPE})	
+     ]]>   
+    </insert>
+  
+    
+    <!--  mysql -->
+    <insert id="saveEntities"> 
+	 	 <![CDATA[  
+	    	insert into module ( MODULEID, MODULENAME, URL, PARENT, ICON, HASCHILD, ISENDOFMODULELEVEL, LEVEL0, ISFOLDER, SHOWMENUPAGE, CHILDSHOWTYPE, MODULETYPE) VALUES 
+	    ]]>  
+	    <foreach collection="entities" item="item" index="index" separator=",">   
+	         ( #{item.MODULEID}, #{item.MODULENAME}, #{item.URL}, #{item.PARENT}, #{item.ICON}, #{item.HASCHILD}, #{item.ISENDOFMODULELEVEL}, #{item.LEVEL0}, #{item.ISFOLDER}, #{item.SHOWMENUPAGE}, #{item.CHILDSHOWTYPE}, #{item.MODULETYPE})
+	    </foreach> 
+	</insert> 
+	
+	
+	<update id="updateByID" >
+		<![CDATA[  
+			update module set 	
+      		MODULENAME = #{entity.MODULENAME},
+      		URL = #{entity.URL},
+      		PARENT = #{entity.PARENT},
+      		ICON = #{entity.ICON},
+      		HASCHILD = #{entity.HASCHILD},
+      		ISENDOFMODULELEVEL = #{entity.ISENDOFMODULELEVEL},
+      		LEVEL0 = #{entity.LEVEL0},
+      		ISFOLDER = #{entity.ISFOLDER},
+      		SHOWMENUPAGE = #{entity.SHOWMENUPAGE},
+      		CHILDSHOWTYPE = #{entity.CHILDSHOWTYPE},
+      		MODULETYPE = #{entity.MODULETYPE}
+      	]]>
+      	<where>
+      		MODULEID = #{id}
+      	</where>  		
+	</update>
+		
+		
+	<update id="updateByCondition">
+		<![CDATA[  
+			update module set 	
+      		MODULENAME = #{entity.MODULENAME},
+      		URL = #{entity.URL},
+      		PARENT = #{entity.PARENT},
+      		ICON = #{entity.ICON},
+      		HASCHILD = #{entity.HASCHILD},
+      		ISENDOFMODULELEVEL = #{entity.ISENDOFMODULELEVEL},
+      		LEVEL0 = #{entity.LEVEL0},
+      		ISFOLDER = #{entity.ISFOLDER},
+      		SHOWMENUPAGE = #{entity.SHOWMENUPAGE},
+      		CHILDSHOWTYPE = #{entity.CHILDSHOWTYPE},
+      		MODULETYPE = #{entity.MODULETYPE}
+      	]]>
+      	<where>
+      		<if test="condition != null">
+      			${condition}
+      		</if>
+      	</where>  		
+	</update>	
+	
+	<update id="updatePropByID">
+		<![CDATA[  
+			update  module set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	MODULEID = #{id}
+        </where>
+	</update>	
+	
+	<update id="updatePropByCondition">
+		<![CDATA[  
+			update  module set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</update>	
+	
+   <delete id="deleteByID"  parameterType="string">
+		<![CDATA[   
+			delete from module   
+		]]>
+		<where>
+			MODULEID = #{ID}
+		</where>
+	</delete>	
+	
+	<delete id="deleteByCondition"  parameterType="string">
+		<![CDATA[   
+			delete from module  
+		]]>
+		<where>
+			<if test="condition != null">
+				${condition}
+			</if>	
+		</where>	
+	</delete>	
+	
+	<delete id="deleteEntities"  parameterType="string">
+		<![CDATA[   
+			delete from module    
+		]]>
+		<where>
+			 MODULEID in
+			 <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+          		#{item}
+        	</foreach>
+		</where>	
+	</delete>
+	
+	
+	<select id="getByID" resultType="com.cqut.entity.module.Module">
+		<![CDATA[   
+			select * from module 
+		]]>
+		<where>
+			MODULEID = #{ID}
+		</where>
+	</select>
+	
+	<select id="getByCondition" resultType="com.cqut.entity.module.Module">
+		<![CDATA[   
+			select * from module 
+		]]>
+		<where>
+			<if test="condition != null">
+		 		${condition}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="findByID" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from module 
+        <where>
+        	MODULEID = #{id}
+        </where>
+	</select>	
+	
+	
+	<select id="findByCondition" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from module 
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</select>		
+	
+		
+	<select id="getCountByCondition" resultType="int">
+		select count(distinct MODULEID) from module
+		<where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>	
+        </where>
+	</select>	
+</mapper>

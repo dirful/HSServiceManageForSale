@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>个人信息</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+<link rel="stylesheet" href="personalCenter.css" type="text/css"></link>
+<script type="text/javascript" src="../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript"
+	src="../../frame/fileupload/jquery.ui.widget.js"></script>
+<script type="text/javascript"
+	src="../../frame/fileupload/jquery.iframe-transport.js"></script>
+<script type="text/javascript"
+	src="../../frame/fileupload/jquery.fileupload.js"></script>
+</head>
+
+<body>
+	<div id="showMessage" style="display:block">
+		<div id="specific">
+			<div class="background">
+				<div class="row" id="big">
+					<div id="touxiang" class="heading">头 像</div>
+						<img id="picture111"></img> 
+						<input style="display:none;width:0px;height:0px;" name="PICID" id="tupian" /> 
+						<input class="changeButton" id="imgUpload" type="file" name="file" data-url="../../systemFileController/upload_1.do" multiple
+							accept="image/png, image/gif, image/jpg, image/jpeg" style="opacity: 0;filter:alpha(opacity=0);" />
+						<div class="assistor">&gt;</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="heading">名 称</div>
+					<div onclick="revise(1)">
+						<div id="realName" class="user_data"></div>
+						<div class="assistor">&gt;</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="heading">微信号</div>
+					<div onclick="revise(2)">
+						<div id="weChat" class="user_data"></div>
+						<div class="assistor">&gt;</div>
+					</div>
+				</div>
+				<hr>
+				<!-- <div class="row">
+					<div class="heading">二维码</div>
+					<div onclick="revise(3)">
+						<div id="QRCode" class="user_data"></div>
+						<div class="assistor">&gt;</div>
+					</div>
+				</div> 
+				<hr>-->
+				<div class="row">
+					<div class="heading">我的地址</div>
+					<div onclick="revise(4)">
+						<div id="address" class="user_data"></div>
+						<div class="assistor">&gt;</div>
+					</div>
+				</div>
+			</div>
+			<div class="background">
+				<div class="row">
+					<div class="heading">部 门</div>
+					<div>
+						<div id="department" class="user_data"></div>
+						<!-- <div class="assistor">></div> -->
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="heading">职 务</div>
+					<div>
+						<div id="post" class="user_data"></div>
+						<!-- <div class="assistor">></div> -->
+					</div>
+				</div>
+				<!--<hr>
+				< div class="row">
+					<div class="heading">签 名</div>
+					<div onclick="revise(5)">
+						<div id="Signature" class="user_data"></div>
+						<div class="assistor">></div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+
+		<div class="change" style="display:none">
+			<input class="abandon" onclick="giveUp()" value="取消" type="button" />
+			<div class="xiugaititle">编辑资料</div>
+			<input class="save" onclick="keep()" value="完成" type="button">
+		</div>
+		<div class="xiugaijiemian" style="display:none">
+			<div class="row">
+				<input class="data0" />
+			</div>
+			<div class="tishi"></div>
+		</div>
+	</div>
+	<script type="text/javascript" src="personalCenter.js"></script>
+</body>
+</html>

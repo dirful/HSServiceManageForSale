@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>quoInfoManaStChance.html</title>
+	<!--用于选择需要统计的员工-->
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="css/quoInfoManaStChance.css" type="text/css"></link>
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+  		<div id="addemployee">
+    	<input id="inputID" value="请输入员工id" type="text"><a id="add" href='#' class='className'>+</a>
+    	</div>
+  </body>
+</html>
+
+
+

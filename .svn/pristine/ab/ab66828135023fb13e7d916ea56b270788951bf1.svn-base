@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>oAuth.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+  <script type="text/javascript" src="../../frame/jquery/jquery-2.1.0.js"></script>
+  </head>
+  
+  <body>
+  	我是OAuth验证
+  	<script type="text/javascript">
+	  	$(document).ready(function(){
+	  		$.post("http://testwebsite.ngrok.natapp.cn/HSServiceManageForSale/weChatAccess/oAuth.do",{},function(){});
+		});
+  	</script>
+  </body>
+</html>

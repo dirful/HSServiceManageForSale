@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>服务信息管理</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+<link rel="stylesheet" href="../css/ServiceMessageManagement.css"
+	type="text/css"></link>
+<script type="text/javascript"
+	src="../../../frame/jquery/jquery-2.1.0.js"></script>
+<link rel="stylesheet" href="../../../frame/dist/dropload.css"
+	type="text/css"></link>
+<script type="text/javascript" src="../../../frame/dist/dropload.js"></script>
+</head>
+
+<body>
+	<div id="background">
+		<div id="hah">
+			<div class="background1"></div>
+		</div>
+		<div id="dianjixianshi" >
+			<div id="bkgd1"></div>
+			<div id="chooseProject"></div>
+		</div>
+
+		<div id="title">
+			<div class="choose" id="send" onclick="chooseMethod(1)">我发送的</div>
+			<div class="choose" id="receive" onclick="chooseMethod(2)" >我收到的</div>
+			<div class="choose" id="new" onclick="add()">
+				<img id="newAdd" src="../img/add1.png"></img>
+			</div>
+		</div>
+		<div class="inner">
+			<div class="content">
+				<!-- <div class="message"></div> -->
+			</div>
+			<div class="pull" style="display:none">亲，没有更多啦</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/ServiceMessageManagement.js"></script>
+</body>
+</html>

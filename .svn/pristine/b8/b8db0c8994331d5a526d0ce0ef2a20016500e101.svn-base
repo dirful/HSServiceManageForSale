@@ -1,0 +1,125 @@
+package com.cqut.service.employee;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.cqut.dao.employee.EmployeeDao;
+import com.cqut.dao.systemFile.SystemFileDao;
+import com.cqut.entity.systemFile.SystemFile;
+import com.cqut.service.search.SearchService;
+import com.cqut.tool.util.FileTool;
+
+@Service
+public class EmployeeService extends SearchService implements IEmployeeService {
+
+	@Resource(name = "employeeDao")
+	EmployeeDao dao;
+
+	@Resource(name = "systemFileDao")
+	SystemFileDao systemFileDao;
+
+	@Override
+	public String getBaseEntityName() {
+		return "employee";
+	}
+
+	@Override
+	public String getBasePrimaryKey() {
+		return "employee.ID";
+	}
+
+	/*
+	 * WXL 根据ID 查询用户信息并显示
+	 * 
+	 * @see com.cqut.service.employee.IEmployeeService#getEmployeeByID(int)
+	 */
+	@Override
+	public List<Map<String, Object>> getEmployeeByID(int ID) {
+		String condition = "employee.ID ='" + ID + "'";
+		String properties[] = { "`employee`.`ID` AS employeeID",
+				"`employee`.address AS address",
+				"`employee`.employeeName AS employeename",
+				"`employee`.wechat AS wechat", "`employee`.headPhoto AS photoID",
+				"`employee`.departmentID as departmentID",
+				"`employee`.dutiesID AS dutiesID",
+				"`department`.departmentName AS departmentName",
+				"`duties`.duties AS duties",
+				"`systemfile`.fileName AS photoName" };
+		String baseEntity = "employee";
+		String joinEntity = "LEFT JOIN department ON department.ID = employee.departmentID "
+				+ " LEFT JOIN duties ON duties.ID = employee.dutiesID "
+				+ " LEFT JOIN systemfile ON systemfile.fileID = employee.headPhoto";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+
+		for (int i = 0; i < list.size(); i++) {
+			String picName = (String) list.get(i).get("photoName");
+			list.get(i).put("photoName", FileTool.getImgRoute(picName));
+		}
+
+		return list;
+	}
+
+	/*
+	 * wxl 根据id更新姓名
+	 * 
+	 * @see
+	 * com.cqut.service.employee.IEmployeeService#updateEmployeenameByID(int,
+	 * java.lang.String)
+	 */
+	@Override
+	public int updateEmployeenameByID(String ID, String employeename) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("employeeName", employeename);
+		return dao.updatePropByID(map.entrySet(), ID);
+	}
+
+	/*
+	 * wxl 根据id更新微信号
+	 * 
+	 * @see
+	 * com.cqut.service.employee.IEmployeeService#updateWeChatByID(java.lang
+	 * .String, java.lang.String)
+	 */
+	@Override
+	public int updateWeChatByID(String ID, String wechat) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("wechat", wechat);
+		return dao.updatePropByID(map.entrySet(), ID);
+	}
+
+	/*
+	 * wxl 根据id更新地址
+	 * 
+	 * @see
+	 * com.cqut.service.employee.IEmployeeService#updateAddressByID(java.lang
+	 * .String, java.lang.String)
+	 */
+	@Override
+	public int updateAddressByID(String ID, String address) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("address", address);
+		return dao.updatePropByID(map.entrySet(), ID);
+	}
+
+	// wxl 根据用户的ID修改用户的头像并显示到用户个人信息管理界面，若用户没有上传头像，则取出默认头像
+	@Override
+	public int updatePropByID(String ID,String PICID) {
+		String photoName = PICID+".jpg";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("headPhoto", PICID);
+		Set<Entry<String, Object>> prop = map.entrySet();
+		SystemFile systemfile = new SystemFile();
+		systemfile.setFileName(photoName);
+		systemfile.setFileID(PICID);
+		systemFileDao.save(systemfile);
+		return dao.updatePropByID(prop, ID);
+	}
+}

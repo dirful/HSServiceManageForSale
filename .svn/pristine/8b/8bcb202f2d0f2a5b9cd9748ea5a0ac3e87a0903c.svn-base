@@ -1,0 +1,491 @@
+var audittype=1;
+var qpID;
+var resuledate;
+var row=5;
+var page=1;
+var url="http://testwebsite.ngrok.natapp.cn/HSServiceManageForSale/webApp/audit/html/audit.html";
+$(document).ready(function(){
+//	determineLogin();
+	loadingstyle();
+	loadingfunction();
+	// 初次默认加载我审核
+	myaudit(row,1);
+	$(window).scrollTop(0);
+	$(".head_part").click(function() {
+		if (!$(this).hasClass("head_activity")) {
+			$(this).addClass("head_activity");
+		}
+		$(this).siblings().removeClass("head_activity");
+	});
+	// 上拉加载
+//	$(window).scroll(function(){
+//		if($(document).scrollTop() >= $(document).height() - $(window).height()){
+//			page++;
+//			if(audittype == 1){
+//				myaudit(row,page);
+//			}else if(audittype == 2){
+//				apply(0,row,page);
+//			}else{
+//				apply(1,row,page);
+//			}
+//		}
+//	});
+	$('#center').dropload({
+	    scrollArea : window,
+	    loadDownFn : function(me){
+	                setTimeout(function(){
+	                	page++;
+	        			if(audittype == 1){
+	        				myaudit(row,page);
+	        			}else if(audittype == 2){
+	        				apply(0,row,page);
+	        			}else{
+	        				apply(1,row,page);
+	        			}
+	                    me.resetload();
+	                },500);
+	            }
+	});
+});
+//判断是否登录
+function determineLogin(){
+	$.ajax({
+		async: false,
+		cache: false,
+		type: "POST",
+		timeout: 10000,
+		url:"../../../employeeController/determineLogin.do",
+		data: {url:url}
+	});
+}
+//各种响应样式
+function interactionstyle(){
+	var i=0;
+	if($("#ls_s").html()=="...."){
+		$("#ls_s").empty();
+	}
+	$("#ls_s").append(".");
+	setTimeout("interactionstyle()", 1000);
+}
+function loadingstyle(){
+	$("#loading").css("margin", (($(window).height()-25)*0.5-35)+"px auto");
+}
+function loadingfunction(){
+	interactionstyle();
+}
+function bgdivload(num){
+	if(num == 1){
+		$("#backgound_div").show();
+		$("body").css("overflow","hidden");
+	}else{
+		$("#backgound_div").hide();
+		$("body").css("overflow","auto");
+	}
+}
+function rddivload(num){
+	if(num == 1){
+		$("#resultdetails").show();
+	}else{
+		$("#resultdetails").hide();
+	}
+}
+function loadload(num){
+	if(num == 1){
+		$("#loading").show();
+	}else{
+		$("#loading").hide();
+	}
+}
+function addivload(num){
+	if(num == 1){
+		$("#approvaldetails").show();
+		document.body.style.overflow = "hidden";
+	}else{
+		$("#approvaldetails").hide();
+		document.body.style.overflow = "auto";
+	}
+}
+function showauditprompt(message){
+	console.info("显示:"+message);
+	$(".ap_inside").empty();
+	$(".ap_inside").append(message);
+	$("#auditprompt").fadeIn(500);
+	setTimeout("hideauditprompt()", 2000);
+}
+function hideauditprompt(){
+	console.info("隐藏");
+	$("#auditprompt").fadeOut(1000);
+}
+//操作信息提示
+function resuletype(type){
+	if(type == 1){
+		return "亲！没有了！";
+	}else if(type == 2){
+		return "该审批消息已经审批结束！";
+	}else if(type == 3){
+		return "该审批消息已经被同级人员审批！";
+	}else if(type == 4){
+		return "该审批消息已经被撤回！";
+	}else if(type == 5){
+		return "操作失败！";
+	}else if(type == 6){
+		return "操作成功！";
+	}else if(type == 7){
+		return "网络出现问题啦！";
+	}else if(type == 8){
+		return "响应超时 请重试！";
+	}else if(type == 9){
+		return "服务器在开小差！";
+	}else if(type == 10){
+		return "未知错误";
+	}
+}
+// 加载审批信息
+function loadaudit(number){
+	page=1;
+	$("#auditlist").empty();
+	if(number == 1){
+		console.info("我审核");
+		audittype=1;
+		myaudit(row,1);
+		return;
+	}
+	if(number == 2){
+		console.info("已审核");
+		audittype=2;
+		apply(0,row,page);
+		return;
+	}
+	if(number == 3){
+		console.info("待审核");
+		audittype=3;
+		apply(1,row,page);
+		return;
+	}
+}
+// 0 1 2 3 4 5 6 7 8 9 10 row=5
+// page=1,0~4,5*(1-1)~5*(1)-1
+// 0 ~ 4
+// page=2,5~9,5*(2-1)~5*(2)-1
+// 5 ~ 9
+// row*(page-1)~row*(page)-1
+function appendappley(data){
+//	console.info((row*(page1-1))+" ~ "+((row*page1)-1));
+//	baginrow=row*(page1-1);
+//	finalrow=(row*page1)-1;
+//	if(data.length < baginrow){
+//		page--;
+//		showauditprompt(resuletype(1));
+//		return;
+//	}
+	if(data.length == 0){
+		page--;
+		showauditprompt(resuletype(1));
+		return;
+	}
+//	for(var i=baginrow,html="";(i<data.length && i<finalrow);i++){
+	for(var i=0,html="";i<data.length;i++){
+		html+='<li>'+
+		'<div class="li_div">'+
+			'<div class="li_of_1" onclick="getProcessDescription('+data[i].ID+')">'+
+				'<a class="projecname">'+data[i].NAME+'</a>';
+		if(data[i].STATE == "驳回"){
+			html+='<a class="state content" style="color:red">'+data[i].STATE+'</a>';
+		}else{
+			html+='<a class="state content">'+data[i].STATE+'</a>';
+		}
+			html+='<div class="auditinfo">'+
+					'<a class="content">项目名称：'+data[i].PROJECTNAME+'</a>'+
+					'<a class="content">提交人：'+data[i].EMPLOYEENAME+'</a>'+
+					'<a class="content">总金额：'+data[i].PRICE+'</a>'+
+					'<a class="content">提交时间：'+data[i].JOINTIME+'</a>'+
+					/* '<a class="content">审核详情：</a>'+ */
+				'</div>'+
+			'</div>'+
+			'<div class="li_of_2">';
+		if(data[i].STATE == "待审核" || data[i].STATE == "审核中"){
+			html+='<div class="withdraw" onclick="operationQuotedPrice(3,'+data[i].ID+')">'+
+					'<a>撤回</a>'+
+				'</div>';
+		}
+		html+='</div>'+
+			'</div>'+
+		'</li>';
+	}
+	$("#auditlist").append(html);
+}
+function apply(type,row,page){
+//	loadload(1);
+//	bgdivload(1);
+	console.info("page:"+page);
+	if(type == 0){
+		condition=" (qp.state ='2' OR qp.state ='3' OR qp.state ='4') ";
+	}else if(type == 1){
+		condition=" (qp.state ='0' OR qp.state ='1') ";
+	}
+	$.ajax({
+		async: true,
+		cache: false,
+		type: "POST",
+		timeout: 10000,
+		url:"../../../quotedPriceController/getQuotedPriceByOfferorsID.do",
+		data: {condition: condition,row: row,page: page},
+		success: function(result){
+			data=jQuery.parseJSON(result);
+//			loadload(0);
+//			bgdivload(0);
+			appendappley(data);
+//			console.info($("#auditlist").find("li").length == 0);
+			if($("#auditlist").find("li").length != 0){
+//				alert("not null")
+				if($("body").hasClass("sto")){
+					$("body").removeClass("sto");
+				}
+			}else{
+//				alert("null");
+				$("body").addClass("sto");
+				$(".sto").css("background-position",  "center "+($(window).height()-200)*0.5+"px");
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+//			loadload(0);
+//			bgdivload(0);
+			if(textStatus == "timeout"){
+				showauditprompt(resuletype(8));
+			}else if(textStatus == "error"){
+				showauditprompt(resuletype(10));
+			}else{
+				showauditprompt(resuletype(7));
+			}
+		}
+	});
+}
+function appendmyaudit(data){
+//	console.info((row*(page1-1))+" ~ "+((row*page1)-1));
+//	baginrow=row*(page1-1);
+//	finalrow=(row*page1)-1;
+//	if(data.length < baginrow){
+//		page--;
+//		showauditprompt(resuletype(1));
+//		return;
+//	}
+//	for(var i=baginrow,html="";(i<data.length && i<finalrow);i++)
+	if(data.length == 0){
+		page--;
+		showauditprompt(resuletype(1));
+		return;
+	}
+	for(var i=0,html="";i<data.length;i++){
+		html+='<li>'+
+		'<div class="li_div">'+
+			'<div class="li_of_1" onclick="getProcessDescription('+data[i].ID+')">'+
+				'<a class="projecname">'+data[i].NAME+'</a>';
+		if(data[i].STATE == "驳回"){
+			html+='<a class="state content" style="color:red">'+data[i].STATE+'</a>';
+		}else{
+			html+='<a class="state content">'+data[i].STATE+'</a>';
+		}
+			html+='<div class="auditinfo">'+
+					'<a class="content">项目名称：'+data[i].PROJECTNAME+'</a>'+
+					'<a class="content">提交人：'+data[i].EMPLOYEENAME+'</a>'+
+					'<a class="content">总金额：'+data[i].PRICE+'</a>'+
+					'<a class="content">提交时间：'+data[i].JOINTIME+'</a>'+
+					/* '<a class="content">审核详情：'+data[i].STATE+'</a>'+ */
+				'</div>'+
+			'</div>'+
+			'<div class="li_of_2">';
+		if(data[i].MYSTATE == "1"){
+			html+='<div class="through" onclick="operationQuotedPrice(1,'+data[i].ID+')">'+
+					'<a>通过</a>'+
+				'</div>'+
+				'<div class="rejected" onclick="determineQuotedPrice(2,'+data[i].ID+')">'+
+					'<a>驳回</a>'+
+				'</div>';
+		}
+		html+='</div>'+
+			'</div>'+
+		'</li>';
+	}
+	$("#auditlist").append(html);
+}
+function myaudit(row,page){
+	//加载界面交互
+//	loadload(1);
+//	bgdivload(1);
+	console.info("page:"+page);
+	$.ajax({
+		async: true,
+		cache: false,
+		type: "POST",
+		timeout: 10000,
+		url:"../../../quotedPriceController/getMyQuotedPriceByCheckName.do",
+		data: {
+			row: row,
+			page: page
+		},
+		success: function(result){
+			date=jQuery.parseJSON(result);
+			console.info(date);
+			//加载界面交互
+//			loadload(0);
+//			bgdivload(0);
+			appendmyaudit(date);
+//			console.info($("#auditlist").find("li").length == 0);
+			if($("#auditlist").find("li").length != 0){
+//				alert("not null")
+				if($("body").hasClass("sto")){
+					$("body").removeClass("sto");
+				}
+			}else{
+//				alert("null");
+				$("body").addClass("sto");
+				$(".sto").css("background-position",  "center "+($(window).height()-200)*0.5+"px");
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			//加载界面交互
+//			loadload(0);
+//			bgdivload(0);
+			if(textStatus == "timeout"){
+				showauditprompt(resuletype(8));
+			}else if(textStatus == "error"){
+				alert("11");
+				showauditprompt(resuletype(10));
+			}else{
+				showauditprompt(resuletype(7));
+			}
+		}
+	});
+}
+//
+function determineQuotedPrice(type,quotedPriceID){
+	$("#rd_content_textarea").val("");
+	qpID=quotedPriceID;
+	bgdivload(1);
+	rddivload(1);
+}
+//驳回审批消息提示信息
+function rd_determine(){
+	se=confirm("您确定要驳回此消息吗");
+	if(!se){
+		return;
+	}
+	console.info("content:"+$("#rd_content_textarea").val());
+	ajaxQuotedPrice(qpID,2,$("#rd_content_textarea").val()+"");
+	bgdivload(0);
+	rddivload(0);
+}
+// 审批信息的提示信息
+function operationQuotedPrice(type,quotedPriceID){
+	var reason="";
+	var message="";
+	if(type == 1){
+		message="通过";
+	}else if(type == 3){
+		message="撤回";
+	}
+	se=confirm("您确定要"+message+"此消息吗");
+	if(!se){
+		return;
+	}
+	ajaxQuotedPrice(quotedPriceID,type,"");
+}
+function ajaxQuotedPrice(quotedPriceID,type,reason){
+	loadload(1);
+	bgdivload(1);
+	$.ajax({
+		async: false,
+		cache: false,
+		type: "POST",
+		timeout: 10000,
+		url:"../../../quotedPriceController/operationQuotedPrice.do",
+		data: {
+				quotedPriceID: quotedPriceID,
+				type: type,
+				reason: reason
+			},
+		success: function(result){
+			if(result == "2"){
+				showauditprompt(resuletype(2));
+			}else if(result == "3"){
+				showauditprompt(resuletype(3));
+			}else if(result == "4"){
+				showauditprompt(resuletype(4));
+			}else if(result == "true"){
+				showauditprompt(resuletype(6));
+			}else{
+				showauditprompt(resuletype(5));
+			}
+			loadload(0);
+			bgdivload(0);
+			loadaudit(audittype);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			loadload(0);
+			bgdivload(0);
+			if(textStatus == "timeout"){
+				showauditprompt(resuletype(8));
+			}else if(textStatus == "error"){
+				showauditprompt(resuletype(10));
+			}else{
+				showauditprompt(resuletype(7));
+			}
+		}
+	});
+}
+// 查看审批流程信息
+function getProcessDescription(quotedPriceID){
+	bgdivload(1);
+	addivload(1);
+	$("#ad_content").empty();
+	$.ajax({
+		async: false,
+		cache: false,
+		type: "POST",
+		timeout: 10000,
+		url:"../../../processDescriptionController/originalSearchForeign.do",
+		data: { quotedPriceID: quotedPriceID , sort: "ASC"},
+		success: function(result){
+			var result=jQuery.parseJSON(result);
+			console.info(result);
+			var html="";
+			var remark="无";
+			for(var i=0;i<result.length;i++){
+				if(result[i].state == 0){
+					if(result[i].remark != "" && typeof(result[i].remark) != "undefined"){
+						remark=result[i].remark;
+					}
+					html+="<p>"+result[i].employeeName+"驳回了审批，"+"原因："+remark+"</p>";
+				}else if(result[i].state == 2){
+					html+="<p>"+result[i].employeeName+"通过了审批"+"</p>";
+				}
+			}
+			if(html == ""){
+				html="<p>无</p>";
+			}
+			loadload(0);
+			bgdivload(0);
+			$("#ad_content").append(html);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			loadload(0);
+			bgdivload(0);
+			if(textStatus == "timeout"){
+				showauditprompt(resuletype(8));
+			}else if(textStatus == "error"){
+				showauditprompt(resuletype(10));
+			}else{
+				showauditprompt(resuletype(7));
+			}
+		}
+	});
+}
+//模块的显示与隐藏
+function ad_return(){
+	bgdivload(0);
+	addivload(0);
+}
+function cancel(){
+	bgdivload(0);
+	rddivload(0);
+}

@@ -1,0 +1,551 @@
+package com.cqut.service.QuotedPrice;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.cqut.service.search.SearchService;
+
+import com.cqut.dao.QuotedPrice.QuotedPriceDao;
+import com.cqut.dao.QuotedPriceDtaile.QuotedPriceDtaileDao;
+import com.cqut.dao.Templet.TempletDao;
+import com.cqut.dao.CheckProcess.CheckProcessDao;
+import com.cqut.dao.ProcessDescription.ProcessDescriptionDao;
+import com.cqut.dao.Process.ProcessDao;
+import com.cqut.entity.CheckProcess.CheckProcess;
+import com.cqut.entity.Process.Process;
+import com.cqut.entity.ProcessDescription.ProcessDescription;
+import com.cqut.entity.QuotedPrice.QuotedPrice;
+import com.cqut.entity.QuotedPriceDtaile.QuotedPriceDtaile;
+
+
+/**
+ * 类详细描述:报价表
+ * @ClassName QuotedPriceService
+ * @author 常景胜
+ * @date 2015-12-23 下午10:25:13
+ */
+@Service
+public class QuotedPriceService extends SearchService implements
+		IQuotedPriceService {
+
+	/** 
+	 * @Fields dao : TODO
+	 */ 
+	@Resource(name = "quotedPriceDao")
+	QuotedPriceDao dao;
+	/** 
+	 * @Fields dtaileDao : TODO
+	 */ 
+	@Resource(name = "quotedPriceDtaileDao")
+	QuotedPriceDtaileDao dtaileDao;
+	/** 
+	 * @Fields processDescripDao : TODO
+	 */ 
+	@Resource(name = "processDescriptionDao")
+	ProcessDescriptionDao processDescripDao;
+	/** 
+	 * @Fields templetDao : TODO
+	 */ 
+	@Resource(name = "templetDao")
+	TempletDao templetDao;
+
+	@Resource(name = "checkProcessDao")
+	CheckProcessDao checkProcessDao;
+
+	@Resource(name = "processDao")
+	ProcessDao processDao;
+	@Override
+	public String getBaseEntityName() {
+		return "quotedPrice";
+	}
+
+	@Override
+	public String getBasePrimaryKey() {
+		return "quotedPrice.ID";
+	}
+
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取用户的报价表
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getQuotedPriceInfo(java.lang.String, int, int)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getQuotedPriceInfo(String condition,
+			int page, int row) {
+		condition = " OfferorsID = " + condition
+				+ " ORDER BY quotedprice.joinTime DESC limit "
+				+ (page * row - 5) + "," + page * row;
+		String[] properties = { "quotedprice.*", "child.Name as childName",
+				"father.Name as fatherName",
+				"grandson.templetName AS grandsonName",
+				"employee.employeeName", "project.projectName" };
+		String baseEntity = " quotedprice ";
+		String joinEntity = "LEFT JOIN templet as grandson ON grandson.ID = quotedprice.TempletID "
+				+ "LEFT JOIN type AS child ON child.ID = grandson.str0 "
+				+ "LEFT JOIN type AS father ON father.ID = child.parentID "
+				+ "LEFT JOIN employee ON OfferorsID = employee.ID "
+				+ "LEFT JOIN project ON quotedprice.projectID = project.ID";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取用户的报价表的数量
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getQuotedPriceInfoCount(java.lang.String)
+	 * 常景胜
+	 */
+	/* (non-Javadoc)
+	 * 覆盖方法描述：
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getQuotedPriceInfoCount(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public int getQuotedPriceInfoCount(String condition) {
+		return dao.getCountByCondition("quotedprice.OfferorsID = " + condition);
+	}
+	
+	/** 
+	 * 方法简述：
+	 * @author 常景胜
+	 * @param condition
+	 * @return 
+	 * 
+	 */
+	@Override
+	public List<Process> getQuotedPriceProcessByID(String condition) {
+		return processDao.getByCondition(condition);
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取报价类，用户姓名
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getNewQuotedPriceInfo(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getNewQuotedPriceInfo(String condition) {
+		condition = " employee.ID = " + condition;
+		String[] properties = { "	employee.employeeName as 'name'",
+				"employee.ID", "Type.parentID", "Type.name as QuotedPriceName",
+				"Type.level", "Type.ID AS typeID", };
+		String baseEntity = " employee ";
+		String joinEntity = "LEFT JOIN Type ON Type.state = 1 and Type.TYPE = 1 ";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取模板 
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getTemplet(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getTemplet(String condition) {
+		condition = " templet.state = 1";
+		String[] properties = { "templet.templetName",
+				"templet.str0 as father", "templet.ID",
+				"templet.str1 as processID"
+
+		};
+		String baseEntity = " templet ";
+		String joinEntity = "";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：存到报价表
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#saveNewQuotedPriceInfo(com.cqut.entity.QuotedPrice.QuotedPrice)
+	 * 常景胜
+	 */
+	@Override
+	public int saveNewQuotedPriceInfo(QuotedPrice param) {
+		int result = dao.save(param);
+		return result;
+	}
+
+	/* *
+	/* (non-Javadoc)
+	 * 覆盖方法描述：存流程描述
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#saveNewProcessDescription(com.cqut.entity.ProcessDescription.ProcessDescription)
+	 * 常景胜
+	 */
+	@Override
+	public int saveNewProcessDescription(ProcessDescription param) {
+		int result = processDescripDao.save(param);
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：保存报价详情
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#saveNewQuotedPriceDtaileInfo(com.cqut.entity.QuotedPriceDtaile.QuotedPriceDtaile)
+	 * 常景胜
+	 */
+	@Override
+	public int saveNewQuotedPriceDtaileInfo(QuotedPriceDtaile param) {
+		int result = dtaileDao.save(param);
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取报价细项
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#quoDetailsList(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> quoDetailsList(String ID) {
+		String condition = "quotedpricedtaile.QuotedPriceID = '" + ID + "'";
+		String[] properties = { "*" };
+		String baseEntity = " quotedpricedtaile ";
+		String joinEntity = "";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：删除报价表
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#deletQuotedPriceInfo(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public int deletQuotedPriceInfo(String condition) {
+		int result = 0;
+		if (dao.deleteByID(condition) == 1
+				&& dtaileDao.deleteByCondition("QuotedPriceID = " + condition) == 1) {
+			result = 1;
+		}
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取报价次数
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getEmployeeInfo(java.lang.String, java.lang.String, java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getEmployeeInfo(String ID, String time,
+			String type) {
+		String condition = "employee.ID IN (" + ID + ")  GROUP BY employeeName";
+		String[] properties = { "COUNT(quotedprice.OfferorsID) AS num",
+				"employee.employeeName as name", "employee.id" };
+		String baseEntity = " employee ";
+		String joinEntity = "LEFT  JOIN quotedprice on employee.ID = quotedprice.OfferorsID and DATE_FORMAT(quotedprice.joinTime,'"
+				+ type + "') = '" + time + "' ";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取项目
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getProject()
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getProject() {
+		String condition = "1=1";
+		String[] properties = { "Project.*", };
+		String baseEntity = " Project ";
+		String joinEntity = "";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+	
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取所有用户
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getEmployee()
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getEmployee(String ID) {
+		String condition = "employee.id !="+ID;
+		String[] properties = { "employee.*", };
+		String baseEntity = " employee ";
+		String joinEntity = "";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+		return list;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述:保存新流程
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#saveNewProcess(com.cqut.entity.Process.Process)
+	 * 常景胜
+	 */
+	@Override
+	public int saveNewProcess(Process newProcess) {
+		return processDao.save(newProcess);
+	}
+	/* (non-Javadoc)
+	 * 覆盖方法描述：保存审批流程
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#saveNewCheckProcess(com.cqut.entity.CheckProcess.CheckProcess)
+	 * 常景胜
+	 */
+	@Override
+	public int saveNewCheckProcess(CheckProcess newCheckProcess) {
+		return checkProcessDao.save(newCheckProcess);
+	}
+	/* (non-Javadoc)
+	 * 覆盖方法描述： 获取报价单(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getBackEmployeeInfo(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getBackEmployeeInfo(int rows, int page,
+			String order, String sort, String condition) {
+		String[] properties = {
+				"quotedprice.*",
+				"DATE_FORMAT(quotedprice.joinTime,'%Y-%m-%d') as thisJoinTime",
+				"child.Name as childName",
+				"father.Name as fatherName",
+				"grandson.templetName AS grandsonName",
+				"employee.employeeName",
+				"project.projectName",
+				"CASE quotedprice.state WHEN -1 THEN '草稿' WHEN 0 THEN '待审核' WHEN 1 THEN '审核中' WHEN 2 THEN '已审核' WHEN 3 THEN '已支付' WHEN 4 THEN '驳回' END AS stateName"
+
+		};
+		String baseEntity = " quotedprice ";
+		String joinEntity = "LEFT JOIN templet as grandson ON grandson.ID = quotedprice.TempletID "
+				+ "LEFT JOIN type AS child ON child.ID = grandson.str0 "
+				+ "LEFT JOIN type AS father ON father.ID = child.parentID "
+				+ "LEFT JOIN employee ON OfferorsID = employee.ID "
+				+ "LEFT JOIN project ON quotedprice.projectID = project.ID";
+		return this.originalSearchWithpaging(properties, baseEntity,
+				joinEntity, null, condition, false, null, order, sort, rows,
+				page);
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：获取报价细项(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#quoDetailsListBack(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> quoDetailsListBack(String ID) {
+		String condition = "quotedpricedtaile.QuotedPriceID = '" + ID + "'";
+		String[] properties = { "*" };
+		String baseEntity = " quotedpricedtaile ";
+		String joinEntity = "";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+
+		return list;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：删除报价单(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#deleteBackEmployeeInfo(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public boolean deleteBackEmployeeInfo(String ID) {
+		boolean flag = false;
+
+		if (dao.deleteByID(ID) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：删除模板(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#deleteTemplet(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public boolean deleteTemplet(String ID) {
+		boolean flag = false;
+
+		if (templetDao.deleteByID(ID) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：统计报价单(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#countBackEmployeeInfo(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public int countBackEmployeeInfo(String condition) {
+		return dao.getCountByCondition(condition);
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述： 获取模板(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#getTemplet(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public List<Map<String, Object>> getTemplet(int rows, int page,
+			String order, String sort, String condition) {
+		String[] properties = { "Templet.*",
+				"DATE_FORMAT(Templet.createTime,'%Y-%m-%d') as thisJoinTime",
+				// "employee.employeeName",
+				"CASE Templet.state WHEN 0 THEN'禁用'WHEN 1 THEN '启用' END AS stateName" };
+		String baseEntity = " Templet ";
+		String joinEntity = "";
+		order = "Templet.createTime";
+		return this.originalSearchWithpaging(properties, baseEntity,
+				joinEntity, null, condition, false, null, order, sort, rows,
+				page);
+	}
+
+	/* (non-Javadoc)
+	 * 覆盖方法描述：统计报价模板(后台)
+	 * @see com.cqut.service.QuotedPrice.IQuotedPriceService#countTemplet(java.lang.String)
+	 * 常景胜
+	 */
+	@Override
+	public int countTemplet(String condition) {
+		return templetDao.getCountByCondition(condition);
+	}
+
+	@Override
+	public List<Map<String, Object>> getQuotedPriceByConditon(String condition) {
+		if (condition != null) {
+			condition += " AND ";
+		}
+		condition += " e.ID = qp.OfferorsID AND  qp.processID=pd.ProcessID AND pd.submitAccountID = qp.ID  ORDER BY qp.joinTime DESC ";
+
+		String[] properties = new String[] {
+				"qp.ID AS ID,qp.`name` AS NAME",
+				"e.employeeName AS EMPLOYEENAME",
+				"qp.price AS PRICE",
+				"DATE_FORMAT(qp.joinTime, '%Y-%m-%e') AS JOINTIME",
+				"CASE pd.state WHEN '1' THEN '待审核'WHEN '2' THEN '已审核'ELSE '数据库错误' END as MYSTATE",
+//				"pj.projectName AS PROJECTNAME",
+				"IF(qp.state='-1','草稿',IF(qp.state='0','待审核',IF(qp.state='1','审核中',IF(qp.state='2','已审核',IF(qp.state='3','已支付',IF(qp.state='4','驳回',-2)))))) AS STATE"
+//				,"pd.state AS MYSTATE" 
+				};
+		String baseEntity = " quotedprice AS qp , employee AS e , processdescription AS pd";
+		String joinEntity = "";
+		List<Map<String, Object>> list = this.originalSearchForeign(properties,
+				baseEntity, joinEntity, null, condition, false);
+
+		return list;
+	}
+	/**
+	 * 胡定鹏 获取报价信息
+	 * 
+	 * @param condition
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> getQuotedPriceByConditonWithpaging(
+			String condition, int row, int page) {
+		if (condition != null) {
+			condition += " AND ";
+		}
+		condition += " e.ID = qp.OfferorsID AND  qp.processID=pd.ProcessID AND pd.submitAccountID = qp.ID";
+/*		condition += " e.ID = qp.OfferorsID AND pj.ID = qp.ProjectID AND qp.processID=pd.ProcessID ";*/
+		
+		return this
+				.originalSearchWithpaging(
+						new String[] {
+								"qp.ID AS ID,qp.`name` AS NAME",
+								"e.employeeName AS EMPLOYEENAME",
+								"qp.price AS PRICE",
+								"DATE_FORMAT(qp.joinTime, '%Y-%m-%e') AS JOINTIME",
+								"CASE pd.state WHEN '1' THEN '待审核'WHEN '2' THEN '已审核'ELSE '数据库错误' END as MYSTATE",
+//								"pj.projectName AS PROJECTNAME",
+								"IF(qp.state='-1','草稿',IF(qp.state='0','待审核',IF(qp.state='1','审核中',IF(qp.state='2','已审核',IF(qp.state='3','已支付',IF(qp.state='4','驳回',-2)))))) AS STATE"
+//								,"pd.state AS MYSTATE" 
+								}, "quotedprice AS qp,",
+						"employee AS e,processdescription AS pd",
+//						project AS pj,
+						null, condition, false, null, "qp.joinTime", " DESC ",
+						row, page);
+	}
+	
+	/**
+	 * 常景胜 获取销售信息
+	 * 
+	 * @param condition
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> getMySaleLogByConditonWithpaging(
+			String condition, int row, int page) {
+		if (condition != null) {
+			condition += " AND ";
+		}
+		condition += " e.ID = sl.OfferorsID AND  sl.processID=pd.ProcessID AND pd.submitAccountID = sl.ID";
+/*		condition += " e.ID = qp.OfferorsID AND pj.ID = qp.ProjectID AND qp.processID=pd.ProcessID ";*/
+		
+		return this
+				.originalSearchWithpaging(
+						new String[] {
+								"sl.ID AS ID,sl.`SaleLogName` AS NAME",
+								"e.employeeName AS EMPLOYEENAME",
+								"sl.Receivableamount AS PRICE",
+								"DATE_FORMAT(sl.CreateTime, '%Y-%m-%e') AS JOINTIME",
+								"CASE pd.state WHEN '1' THEN '待审核'WHEN '2' THEN '已审核'ELSE '数据库错误' END as MYSTATE",
+//								"pj.projectName AS PROJECTNAME",
+								"IF(sl.state='-1','草稿',IF(sl.state='0','待审核',IF(sl.state='1','审核中',IF(sl.state='2','已审核',IF(sl.state='3','已支付',IF(sl.state='4','驳回',-2)))))) AS STATE"
+//								,"pd.state AS MYSTATE" 
+								}, "salelog AS sl,",
+						"employee AS e,processdescription AS pd",
+//						project AS pj,
+						null, condition, false, null, "sl.CreateTime", " DESC ",
+						row, page);
+	}
+
+	/**
+	 * 胡定鹏 传入申请人ID，取出申请信息
+	 * 
+	 * @param offerorsID
+	 *            申请人ID
+	 * @param condition
+	 *            条件
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> getQuotedPriceByOfferorsIDWithpaging(
+			String offerorsID, String condition, int row, int page) {
+		if (condition != null && condition != "") {
+			condition += " AND ";
+		} else {
+			condition = " ";
+		}
+		return originalSearchWithpaging(
+				new String[] {
+						"qp.ID AS ID,qp.`name` AS NAME",
+						"e.employeeName AS EMPLOYEENAME",
+						"qp.price AS PRICE",
+						"DATE_FORMAT(qp.joinTime, '%Y-%m-%e') AS JOINTIME",
+//						"pj.projectName AS PROJECTNAME",
+						"IF(qp.state='-1','草稿',IF(qp.state='0','待审核',IF(qp.state='1','审核中',IF(qp.state='2','已审核',IF(qp.state='3','已支付',IF(qp.state='4','驳回',-2)))))) AS STATE" },
+				"quotedprice AS qp,",
+				"employee AS e,project AS pj",
+				null,
+				condition
+						+ " qp.OfferorsID = '"
+						+ offerorsID
+//						+ "' AND e.ID = qp.OfferorsID AND pj.ID = qp.ProjectID ",
+						+ "' AND e.ID = qp.OfferorsID ",
+				false, null, "qp.joinTime", "DESC", row, page);
+	}
+
+	@Override
+	public QuotedPrice getQuotedPriceByID(String ID) {
+		return dao.getByID(ID);
+	}
+
+	@Override
+	public int updateByID(QuotedPrice quotedPrice) {
+		return dao.updateByID(quotedPrice, quotedPrice.getID());
+	}
+}

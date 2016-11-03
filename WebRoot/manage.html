@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>西计后台管理系统</title>
+		<link rel="stylesheet" type="text/css" href="module/manage/manage.css">
+		<link rel="stylesheet" type="text/css" href="frame/easyui/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="frame/easyui/themes/icon.css">  
+	
+		<script  src="frame/easyui/jquery.min.js"></script>
+		<script  src="frame/easyui/jquery.easyui.min.js"></script>
+		<!-- sypro对easyUi的扩展 -->
+		<script  src="frame/easyui/extEasyUI.js"></script>
+		<!-- 支持中文 -->
+		<script  src="frame/easyui/locale/easyui-lang-zh_CN.js"></script>
+		<!-- 对easyUI验证扩展 -->
+  		<script  src="frame/easyui/validata.js"></script>
+  		<!-- 对jquery扩展 -->
+		<script type="text/javascript" src="frame/extUtil.js"></script>
+		<!-- 上传组件 -->
+		<script language="javascript" type="text/javascript" src="frame/fileupload/jquery.ui.widget.js"></script>
+		<script language="javascript" type="text/javascript" src="frame/fileupload/jquery.iframe-transport.js"></script>
+		<script language="javascript" type="text/javascript" src="frame/fileupload/jquery.fileupload.js"></script>
+		
+	</head>
+	<body>
+		<script type="text/javascript">
+			var user;
+			$.ajax({
+				async: false,
+				cache: false,
+				type: "POST",
+				url: "sessionController/verifyLogin.do",
+				success: function(result){
+					user = jQuery.parseJSON(result);
+// 					if(user.verify == 0){
+// 						alert("未登录，请登录。");
+// 						window.location.href = "index.html";
+// 					}
+				}
+			});
+		</script>
+		<div id="container">
+		
+			<div id="headContent" style="background: url('img/manager/headBackground.png')">
+				<div>
+					<img src="img/manager/logo.png" style="margin: 15px 30px" >
+				</div>
+				<div id="operating">
+					<a id="changePasswordElem"><img src="img/manager/changePsw.jpg"/>修改密码</a>
+					<img src="img/manager/bar.png" />
+					<a id="exit"><img src="img/manager/exit.jpg" />退出</a>
+				</div>
+			</div>
+
+			<div id="headBar" style="background-color: #0171BD;height: 1%;width: 100%;"></div>
+			
+			<!--左侧内容-->
+			<div id="mainNavigation">
+				<!-- 用户信息 -->
+				<div id="operatorInfo">
+					<img src="img/manager/defaultPhoto.png" class="operatorPhoto" id="headPhoto">
+					<img src="img/manager/photoMask.png" class="operatorPhoto"> 
+					
+					<div id="greeting">
+						<span id="dateArea"></span>
+						<span id="userName"></span><span>，您 好</span>
+					</div>
+				</div>
+				
+				<!-- 导航 -->
+				<div id="navigations">
+					<div class='items'  style='display:block' id="items">
+						<!-- <a class='columns'  href='module/jsp/userManagement/userManagerUi.jsp' target='content'>>员工管理</a>
+					    <a class='columns'  href='module/jsp/productManage/productManage.jsp' target='content'>>产品管理</a>
+					      <a class='columns'  href='module/jsp/newsManage/newsManage.jsp' target='content'>>新闻管理</a>
+					      <a class='columns'  href='module/jsp/moduleManage/moduleManage.jsp' target='content'>>模块管理</a>
+					      <a class='columns'  href='module/jsp/columnManage/columnManage.jsp' target='content'>>栏目管理</a>
+					      <a class='columns'  href='module/jsp/permissionManage/permissionManage.jsp' target='content'>>权限管理</a>
+					      <a class='columns'  href='module/jsp/codeTableManage/codeTableManage.jsp' target='content'>>码表管理</a> -->
+					</div>
+				</div>
+			</div>
+			<div id="mainContent">
+				<div id="chiefMenu">
+				</div>
+				
+				<div id="location">
+					<img src="img/manager/location.png" style="margin-top: 5px;">
+					<span id="menuLocation">首页</span>
+				</div>
+				<iframe  name="content" frameborder="0" style="width: 97%;height: 85%;margin-left: 20px;"></iframe>
+			</div>
+			
+			<div id="bottom">
+				<div style="margin-left: 20px;width: 20%;float: left;line-height: 250%;">
+					<!-- <a iconCls="iocn-user">系统当前在线人数:2人</a> -->
+				</div>
+				
+				<div style="width: 75%;float: right;text-align: center;line-height: 250%;">
+					系统版本V1.01
+				</div>
+			</div>
+			
+		</div>
+	
+		<!-- 加载时使用的覆盖层 -->
+		<div id="background"  style="display:none"></div> 
+		<div id="progressBar" style="display:none">数据加载中，请稍等...</button></div> 
+	    <script  src="module/manage/manage.js"></script>
+	</body>
+</html>

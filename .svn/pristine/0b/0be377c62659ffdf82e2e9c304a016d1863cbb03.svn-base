@@ -1,0 +1,151 @@
+@CHARSET "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+	font-family: "微软雅黑";
+}
+body{
+	height:100%;
+	width:100%;
+	/* background-color: rgb(240,240,240); */
+	font-size: 15px;
+}
+
+#showMessage{
+	width:100%;
+}
+#background{
+	height:100%;
+	width:100%;
+	z-index: -1;
+	position: fixed;
+	top:0px;
+}
+.user_data{
+	width:100%;
+	font-size: 15px; 
+}
+.row{
+	margin-top: 1px;
+	height:40px;
+	line-height:40px;
+	width:100%; 
+	display:inline-block;
+}
+#big{
+	height:80px;
+	line-height: 80px;
+}
+#touxiang{
+	line-height: 80px;
+}
+#picture111{
+	height:80px;
+	width:80px;
+	border-radius:40px;
+	margin-left:30%;
+}
+#imgUpload{
+	height:80px;
+	width:80px;
+	border-radius:40px;
+    float: left;
+    margin-top: 1px;
+	position:absolute;
+	left: 65%;
+    top: 1%;
+	background-color:#000;
+}
+.heading{
+	height:40px;
+	width:30%;
+	line-height: 40px;
+	font-size: 15px;
+	margin-left: 19px;
+	text-align:center;
+	float:left;
+}
+.user_data{
+	height:40px;
+	width:50%;
+	line-height: 40px;
+	font-size: 15px;
+	float:left;
+	text-align: right;
+	text-overflow:ellipsis; 
+    overflow: hidden; 
+    white-space: nowrap;
+}
+.assistor{
+	height: 20px;
+    width: 4%;
+    margin-right: 3%;
+    float: right;
+}
+.background{
+	background-color: rgb(236,236,236);
+	margin: 5px auto;
+	width:96%;
+	border:1px solid rgb(0,0,0);
+}
+
+
+.change{
+	height:50px;
+	width:100%;
+	text-align:center;
+	font-size: 15px;
+	line-height: 50px; 
+}
+.abandon{
+	height: 35px;
+    width: 16%;
+    line-height: 35px;
+    border-radius: 30px;
+    border:0px;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 8px;
+    margin-left: 4%;
+    float: left;
+    background-color: rgb(0,204,0);
+    color: rgb(255,255,255);
+}
+.xiugaititle{
+	height:50px;
+	width:60%;
+	line-height: 50px;
+	font-size: 15px;
+	text-align:center;
+	float:left;
+}
+.save{
+	height: 35px;
+    width: 16%;
+    border-radius: 30px;
+    border:0px;
+    line-height: 35px;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 8px;
+    float: left;
+    margin-right:4%;
+    background-color: rgb(0,204,0);
+    color: rgb(255,255,255);
+}
+.data0{
+	height:40px;
+	width:94%;
+	line-height: 40px;
+	margin-left:3%;
+	font-size: 15px;
+	 float:left; 
+}
+.tishi{
+	height:15px;
+	width:100%;
+	text-align: center;
+	line-height: 15px;
+	color:rgb(0,204,0);
+	font-size: 15px;
+}

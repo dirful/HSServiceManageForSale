@@ -1,0 +1,300 @@
+var timestamp=new Date().getTime();//获取时间戳
+var allData = '';//全数据
+var evalData="";//保存取出的信息
+var thebody="";//保存制作好的页面
+var typeB ='';//大类
+var typeL;//小类
+var parentID = '';//被选中的大类
+var childID = '';//被选中的小类
+var templetData = '';//模板数据
+var projectData ='';//项目数据
+var templet = "";//模板选择框
+var project = "";//项目选择框
+var isInfo = "0";//确定当前页面是否为详情页面
+var dtaileNum = 0;//计算详情条
+var dtaileNameList = "" ;//详情名称组
+var dtailePriceList = "" ;//详情价格组
+var item = '';//项目选择表
+var employeeData = "";//用户数据表
+var employee = "";//用户选项
+var rag = /^[0-9]+\.{1}[0-9]{1,2}$|^[1-9]{1}[0-9]{0,}$/;//正则,用来判断是否为数字
+var ragText = /^\s{0,}$/;//正则,判断是否为空 
+//取出类型
+$.ajax({
+		type    : "POST",
+		url     : "../../quotedPriceController/getNewQuotedPriceInfo.do",
+		data    :{},
+		async   : false,
+		success : function(data){
+			allevalData = $.parseJSON(data);
+			evalData = allevalData[0].list;
+			templetData = allevalData[0].templet;
+			projectData = allevalData[0].project;
+			employeeData = allevalData[0].employee;
+			typeB = "<div id='typeBList' class='chooseList' >";
+			typeL ="<div id='typeLList' >";
+			if(evalData.length > 0){
+				//大类小类选择表
+				for(var i = 0;i < evalData.length; i++){	
+					if(evalData[i].level == 1){
+						typeB = typeB + '<div class="chooseThis" rpg="typeB" value="'+evalData[i].QuotedPriceName+'" myID="'+evalData[i].typeID+'">'+evalData[i].QuotedPriceName+'</div>';
+					}
+					if(evalData[i].level == 2){
+						typeL = typeL + '<div class="chooseThis" rpg="typeL" value="'+evalData[i].QuotedPriceName+'"  myID="'+evalData[i].typeID+'"  parentID="'+evalData[i].parentID+'">'+evalData[i].QuotedPriceName+'</div>';
+					}
+				}
+				typeB = typeB+ "</div>";
+				typeL = typeL+"</div>";
+				//模板选择表
+				if(templetData.length > 0){
+					templet = "<div id='templetList' class='chooseList' >";
+					for(var a = 0; a < templetData.length; a++){
+						templet = templet + '<div   processID="'+templetData[a].processID+'" class="chooseThis"  rpg="templet"   myID="'+templetData[a].ID+'" father="'+templetData[a].father+'" value="'+templetData[a].templetName+'">'+templetData[a].templetName+'</div>';
+					}
+					templet = templet+"</div>";
+				}
+				//项目名称选择表
+				if(projectData.length > 0){
+					project = "<div id='projectList'  class='chooseList'>";
+					for(var c = 0; c < projectData.length; c++){
+						project = project + '<div class="chooseThis"  myID="'+projectData[c].ID+'" value="'+projectData[c].projectName+'"   rpg="project"  >'+projectData[c].projectName+'</div>';
+					}
+					project = project+"</div>";
+				}
+				if(employeeData.length > 0){
+					employee = "<div id='employeeList'  class='chooseList'>";
+					for(var d = 0; d < employeeData.length; d++){
+						employee = employee + '<div class="chooseThis"  myID="'+employeeData[d].ID+'" value="'+employeeData[d].employeeName+'"   rpg="employee"  >'+employeeData[d].employeeName+'</div>';
+					}
+					employee = employee+"</div>";
+				}
+				thebody = thebody + 
+				' 	<div>'+
+	  	'<div><span>选择信息模板</span></div>'+
+	  	'<div><span>填报报价信息</span></div>'+
+  	'</div>'+
+	  	'<div>'+
+		'<div id="first_table">'+
+			'<div id="typeBFather"><span>所属大类</span>'+typeB+'<div id="typeB" myID="-1">请选择大类</div></div>'+
+			'<div id="typeLFather"><span>所属小类</span>'+typeL+'<div id="typeL" myID="-1">请选择小类</div></div>'+
+			'<div id="templetFather"><span>日志模板</span>'+templet+'<div id="templet" processID="" myID="-1">请选择模板</div></div>'+
+		'</div>'+
+		'<div id="secend_table">'+
+			'<div><span>报价单编号</span><div>'+timestamp+'</div></div>'+
+			'<div id="projectFather"><span>项目名称</span><div><span id="start">*</span><input id="project" myID="" maxlength="100" value=""  type="text" /></div></div>'+
+			'<div><span>报价人</span><div>'+evalData[0].name+'</div></div>'+
+			'<div id="chooseExaminationFather"><span>选择审核人</span><span id="employeeOpenFather"><span id="employeeOpen" employeeOpen="0" >L</span></span>'+employee+'<div id="employee" myID="">打钩后可以选择自定义审核人</div></div>'+
+			'<div><span>报价细项</span><div id="total" total="0">0￥</div></div>'+
+			'<div id="addDtaile" >'+
+			'</div>'+
+			'<div id="addInfoName" class="addInfo"><span>详情:</span><input id="dtaileName" type="text"></div><div id="addInfoPrice" class="addInfo"><span>金额:</span><input id="dtailePrice" type="text"><a id="add"  class="className">+</a></div>'+ 
+		'</div>'+
+		'<div id="submit"><span>下一步</span></div>'+
+  	'</div>';
+			}
+		$("body").append(thebody);
+		$("#first_table").show();
+		$("#secend_table").hide();
+		$("#templet>option").hide();
+		parentID = $("#typeB>option:selected").attr("myID");
+		$("#typeL>option:not([parentID='"+parentID+"'])").hide();
+		$("#typeL>option[parentID='"+parentID+"']").show();
+		}
+});
+//选框
+$(document).on("touchend","body>div:nth-of-type(1)>div:first-child",function(){
+	$("#first_table").show();
+	$(".chooseList").css("display","none");
+	$("body>div:nth-of-type(1)>div:first-child").css({
+		"color":"rgba(0,204,0,1)",
+	    "border-bottom":"2px solid rgba(0,204,0,1)"
+		});
+	$("body>div:nth-of-type(1)>div:last-child").css({
+		"color":"rgba(0,0,0,1)",
+	    "border-bottom":"2px solid rgba(153,153,153,1)"
+		});
+	$("#secend_table").hide();
+	isInfo = "0";
+	$("#submit>span").html("下一步");
+}); 
+//打开大类选择，关闭其他选择
+$(document).on("touchend","#typeB",function(){
+	$("#templetList,#typeLList").css("display","none");
+	$("#typeBList").css("display","block");
+});
+//打开小类选择关闭其他选择
+$(document).on("touchend","#typeL",function(){  
+	$("#typeBList,#templetList").css("display","none");
+	$("#typeLList").css("display","block");
+});
+//打开模板选择关闭其他选择
+$(document).on("touchend","#templet",function(){
+	$("#typeLList,#typeBList").css("display","none");
+	$("#templetList").css("display","block");
+});
+//打开申请人选择关闭其他选择
+$(document).on("touchend","#employee",function(){
+	if($("#employeeOpen").attr("employeeOpen")=="1"){
+		$("#employeeList").css("display","block");		
+	}
+});
+$(document).on("touchend","#projectFather,#typeBFather,#typeLFather,#templetFather",function(){
+	
+	switch($(this).attr("ID")){
+	case 'typeBFather':$("#templetList,#typeLList").css("display","none");break;
+	case 'typeLFather':$("#templetList,#typeBList").css("display","none");break;
+	case 'templetFather':$("#typeLList,#typeBList").css("display","none");break;
+	}
+});
+//选项触发事件
+$(document).on("touchend",".chooseThis",function(){
+	var rpg = $(this).attr("rpg");
+	var myID = $(this).attr("myID");
+	var value = $(this).attr("value");
+	var processID = $(this).attr("processID");
+	switch(rpg){
+	case "typeB":
+		if($("#typeB").attr("myID") != myID){
+			$("#typeL,#templet").html("");
+			$("#typeL,#templet").attr("myID","");
+			$(".chooseThis[rpg='typeL'],.chooseThis[rpg='templet']").css("display","none");
+			$(".chooseThis[rpg='typeL'][parentID='"+myID+"']").css("display","block");
+		};
+		break;
+	case "typeL":if($("#typeL").attr("typeL") != myID){
+		$("#templet").html("");
+		$("#templet").attr("myID","");
+		$(".chooseThis[rpg='templet']").css("display","none");
+		$(".chooseThis[rpg='templet'][father='"+myID+"']").css("display","block");
+	};break;
+	case "templet":$("#"+rpg).attr("processID",processID);break;
+	case "employee":console.log("触发选择项目");break;
+	}
+    $("#"+rpg).html(value);//将取出的东西放好
+    $("#"+rpg).attr("myID",myID);//将取出的ID放好
+    $("#"+rpg+"List").css("display","none");//选择后隐藏
+});
+//提交事件
+$(document).on("touchend","#submit",function(){
+	var templet = $("#templet").attr("myid");
+	var processID = $("#templet").attr("processID");
+	var typeL =$("#typeL").attr("myid");
+//	var val = $("#project").attr("myid");
+	var val = $("#project").val();
+	var totalPrice = $("#total").attr("total");
+	var employeeOpen = $("#employeeOpen").attr("employeeOpen");
+	var employeeMyid = $("#employee").attr("myid");
+	var employeeName = $("#employee").html();
+	var ID = timestamp;
+	//判断是否选择了模板或者小类
+	if(typeL == null || typeL ==""){
+		alert("请选择小类");
+	}else if(templet == null || templet =="" ){
+		alert("请选择模板");
+	}
+	if(isInfo == "0" && typeL != null && templet != null && templet != "" && typeL != ""){
+		$("#first_table").hide();
+		$("body>div:nth-of-type(1)>div:last-child").css({
+		"color":"rgba(0,204,0,1)",
+	    "border-bottom":"2px solid rgba(0,204,0,1)"
+		});
+		$("body>div:nth-of-type(1)>div:first-child").css({
+			"color":"rgba(0,0,0,1)",
+		    "border-bottom":"2px solid rgba(153,153,153,1)"
+			});
+		$("#secend_table").show();
+		isInfo = "1";
+		$("#submit>span").html("提交");
+	}else if(isInfo == "1"){ //如果页面为详情页面按钮的作用就是提交
+		if(employeeOpen == "1"){
+			if(employeeMyid=="" || employeeMyid==null ){
+				return alert("请选择审批人或者使用默认");
+			}
+		}
+		if(val != null && val != "请选择项目名称" && typeof val != "undefined" && val != "" && val != " " && dtaileNum != 0){
+			for(var i = 1;i <= dtaileNum; i++){//循环将报价详情变为逗号隔开的数组
+				dtaileNameList = dtaileNameList + $("#addDtaile>div:nth-of-type("+i+")>div:nth-of-type(1)").html()+",";
+				dtailePriceList = dtailePriceList + $("#addDtaile>div:nth-of-type("+i+")>div:nth-of-type(2)").attr("price")+",";
+			}
+			$.ajax({
+				type    : "POST",
+				url     : "../../quotedPriceController/saveNewQuotedPriceInfo.do",
+				data    :{
+					employeeMyid:employeeMyid,
+					employeeOpen:employeeOpen,
+					employeeName:employeeName,
+					price:totalPrice,
+					processID:processID,//借来保存流程的ID
+					templetID:templet,
+					ID:ID,
+//					projectID:val,
+					name:val,
+					QuotedPriceDtaileID:ID,
+					dtaileNameList:dtaileNameList,
+					dtailePriceList:dtailePriceList
+				},
+				async   : false,
+				success : function(data){
+					if(data = "1"){
+						window.location.href="../quoInfoMana/quoInfoMana.html";
+					}else{
+						alert("保存失败请重试");
+					}
+				}});
+		}else{
+			alert("报价单名和报价细项不能为空");
+		}
+
+
+	}
+});
+//姓名框失去焦点后判断是否为空
+$("#project").blur(function chooseName() {
+	var	val = $("#project").val();
+	if(val != null && typeof val != "undefined" && val != "" && val != " "){
+		$("#start").css("color","#fff");
+		$("#project").css("border","0px");
+	}else{
+		$("#start").css("color","red");
+		$("#project").css("border","1px #000 solid");
+	};
+	/*$("#manaName").attr("value","111");*/
+});
+//加入新细项
+$(document).on("touchend","#add",function() {
+	var dtaileName = $("#dtaileName").val();
+	var dtailePrice = $("#dtailePrice").val();
+	if(rag.test(dtailePrice) && !ragText.test(dtaileName)){
+		dtaileNum++;
+		var dtaile = '<div id="'+dtaileNum+'"><a  num="'+dtaileNum+'"  class="delete">+</a><div>'+dtaileName+'</div><div price="'+dtailePrice*100+'">'+(dtailePrice * 1).toFixed(2)+'￥</div></div>';
+		$("#addDtaile").append(dtaile);
+		var total = $("#total").attr("total") * 1 + dtailePrice * 1;
+		$("#total").html(total.toFixed(2) + "￥");
+		$("#total").attr("total",(total*100).toFixed(0));
+		$("#dtaileName").val("");
+		$("#dtailePrice").val("");
+	};
+});
+//删除细项功能
+$(document).on("touchend",".delete",function(){
+	var thisID = $(this).attr("num");
+	var dtailePrice = $("#"+thisID+">div:nth-of-type(2)").attr("price");
+	var total = $("#total").attr("total") * 1 - dtailePrice * 1;
+	$("#total").html(total.toFixed(2) + "￥");
+	$("#total").attr("total",total.toFixed(2));
+	$("#"+thisID+"").remove();
+	dtaileNum--;
+
+});
+//点击勾(employeeOpenFather)
+$(document).on("touchend","#employeeOpenFather",function(){
+	if($("#employeeOpen").attr("employeeOpen") == "0"){
+		$("#employeeOpen").attr("employeeOpen","1");
+		$("#employeeOpen").css("color","#000");
+	}else if($("#employeeOpen").attr("employeeOpen") == "1"){
+		$("#employeeOpen").attr({employeeOpen:0});
+		$("#employeeOpen").attr({myid:""});
+		$("#employeeOpen").css("color","#fff");
+		$("#employee").html("打钩后可以选择自定义审核人");
+	}
+});

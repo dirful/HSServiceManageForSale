@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>项目信息</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width = device-width ,initial-scale = 1.0 , minimum-scale = 1.0 , user-scalable =  no ">
+	<meta name="format-detection" content="telephone=no">
+	
+	<link rel="stylesheet" type="text/css" href="../css/ProjectInformationCollectionAndManagement.css">
+	
+	<script type="text/javascript" src="../../../frame/jquery/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="../js/ProjectInformationCollectionAndManagement.js"></script>
+</head>
+  
+<body>
+	<input type="button" id="add" value="新建项目" style="display:none"/>
+	<div id="projectBox"></div>
+	
+	<div class="detailBox" id="detailBox" >
+		<div class="detailData_box">
+			<div class="data_row2" id="projectCode2">项目编码<div class="data2"></div></div>
+			<div class="data_row2" id="projectName2">项目名称<div class="data2"></div></div>
+			<div class="data_row2" id="bigClass2">所属大类<div class="data2"></div></div>
+			<div class="data_row2" id="subclass2">所属小类<div class="data2"></div></div>
+			<div class="data_row2" id="templetName2">日志模板<div class="data2"></div></div>
+			
+			<div class="data_row_area" id="remarks2">项目描述<div class=data_area></div></div>
+			<div class="data_row2" id="leaderID2">项目负责人<div class="data2"></div></div>
+			<div class="data_row2" id="consumerWorkPlace2">客户姓名<div class="data2"></div></div>
+			<div class="data_row2" id="contactsName2">联系人<div class="data2"></div></div>
+			<div class="data_row_area" id="progress2">项目进展<div class=data_area></div></div>
+			
+			<div class="data_row2" id="createTime2">提交时间<div class="data2"></div></div>
+			<div class="data_pic" id="data_pic"></div>
+		</div>
+		
+		<input type="button" id="return" value="返回"/>
+	</div>
+</body>
+</html>

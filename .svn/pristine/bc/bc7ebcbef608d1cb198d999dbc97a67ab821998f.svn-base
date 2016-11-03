@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqut.dao.codeTable.CodeTableDao">
+ 
+    <insert id="save" parameterType="com.cqut.entity.codeTable.CodeTable">  
+     <![CDATA[   
+         insert into  codeTable ( codeTableID, time, codeTableName, codeType, description, field0, field1)
+         values(#{codeTableID}, #{time}, #{codeTableName}, #{codeType}, #{description}, #{field0}, #{field1})	
+     ]]>   
+    </insert>
+  
+    
+    <!--  mysql -->
+    <insert id="saveEntities"> 
+	 	 <![CDATA[  
+	    	insert into codeTable ( codeTableID, time, codeTableName, codeType, description, field0, field1) VALUES 
+	    ]]>  
+	    <foreach collection="entities" item="item" index="index" separator=",">   
+	         ( #{item.codeTableID}, #{item.time}, #{item.codeTableName}, #{item.codeType}, #{item.description}, #{item.field0}, #{item.field1})
+	    </foreach> 
+	</insert> 
+	
+	
+	<update id="updateByID" >
+		<![CDATA[  
+			update codeTable set 	
+      		time = #{entity.time},
+      		codeTableName = #{entity.codeTableName},
+      		codeType = #{entity.codeType},
+      		description = #{entity.description},
+      		field0 = #{entity.field0},
+      		field1 = #{entity.field1}
+      	]]>
+      	<where>
+      		codeTableID = #{id}
+      	</where>  		
+	</update>
+		
+		
+	<update id="updateByCondition">
+		<![CDATA[  
+			update codeTable set 	
+      		time = #{entity.time},
+      		codeTableName = #{entity.codeTableName},
+      		codeType = #{entity.codeType},
+      		description = #{entity.description},
+      		field0 = #{entity.field0},
+      		field1 = #{entity.field1}
+      	]]>
+      	<where>
+      		<if test="condition != null">
+      			${condition}
+      		</if>
+      	</where>  		
+	</update>	
+	
+	<update id="updatePropByID">
+		<![CDATA[  
+			update  codeTable set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	codeTableID = #{id}
+        </where>
+	</update>	
+	
+	<update id="updatePropByCondition">
+		<![CDATA[  
+			update  codeTable set
+		]]>
+		<foreach collection="prop" item="item" index="index" separator=",">
+          	${item.key} = #{item.value}
+        </foreach>
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</update>	
+	
+   <delete id="deleteByID"  parameterType="string">
+		<![CDATA[   
+			delete from codeTable   
+		]]>
+		<where>
+			codeTableID = #{ID}
+		</where>
+	</delete>	
+	
+	<delete id="deleteByCondition"  parameterType="string">
+		<![CDATA[   
+			delete from codeTable  
+		]]>
+		<where>
+			<if test="condition != null">
+				${condition}
+			</if>	
+		</where>	
+	</delete>	
+	
+	<delete id="deleteEntities"  parameterType="string">
+		<![CDATA[   
+			delete from codeTable    
+		]]>
+		<where>
+			 codeTableID in
+			 <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+          		#{item}
+        	</foreach>
+		</where>	
+	</delete>
+	
+	
+	<select id="getByID" resultType="com.cqut.entity.codeTable.CodeTable">
+		<![CDATA[   
+			select * from codeTable 
+		]]>
+		<where>
+			codeTableID = #{ID}
+		</where>
+	</select>
+	
+	<select id="getByCondition" resultType="com.cqut.entity.codeTable.CodeTable">
+		<![CDATA[   
+			select * from codeTable 
+		]]>
+		<where>
+			<if test="condition != null">
+		 		${condition}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="findByID" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from codeTable 
+        <where>
+        	codeTableID = #{id}
+        </where>
+	</select>	
+	
+	
+	<select id="findByCondition" resultType="map">
+		select 
+		<foreach collection="properties" item="item" index="index" separator=",">
+          	${item}
+        </foreach>
+        from codeTable 
+        <where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>
+        </where>
+	</select>		
+	
+		
+	<select id="getCountByCondition" resultType="int">
+		select count(distinct codeTableID) from codeTable
+		<where>
+        	<if test="condition != null">
+        		${condition}
+        	</if>	
+        </where>
+	</select>	
+</mapper>

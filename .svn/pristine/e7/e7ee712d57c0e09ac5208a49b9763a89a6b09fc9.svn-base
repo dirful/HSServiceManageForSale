@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="HSServiceManageForSale"
+  id="myeclipse.1445945608571"
+  context-root="/HSServiceManageForSale"
+  j2ee-spec="6.0"
+  archive="HSServiceManageForSale.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

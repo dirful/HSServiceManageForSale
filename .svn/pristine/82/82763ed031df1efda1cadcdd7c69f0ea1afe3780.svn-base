@@ -1,0 +1,14 @@
+package com.cqut.service.Templet;
+
+import java.util.List;
+import java.util.Map;
+
+import com.cqut.entity.Templet.Templet;
+
+
+public interface ITempletService {
+
+	List<Map<String, Object>> getstr(String conditions);
+	public List<Map<String, Object>> getServiceMessageTemplet(int rows, int page, String order, String sort, String condition);
+	public int deleteServiceTemplet(String ID);
+}

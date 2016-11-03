@@ -1,0 +1,71 @@
+package com.cqut.service.administrator;
+
+
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Service;
+import com.cqut.service.search.SearchService;
+import com.cqut.tool.util.EntityIDFactory;
+
+import  com.cqut.dao.administrator.AdministratorDao;
+import  com.cqut.entity.administrator.Administrator;
+
+@Service
+public class AdministratorService extends SearchService implements IAdministratorService{
+	
+	@Resource(name="administratorDao")
+	AdministratorDao dao ;
+
+	@Override
+	public String getBaseEntityName() {
+		return "administrator";
+	}
+
+	@Override
+	public String getBasePrimaryKey() {
+		return "administrator.ID";
+	}
+	
+	@Override
+	public String login(Administrator administrator, HttpServletRequest request) {
+		String loginName = administrator.getLOGINNAME();
+		String password = administrator.getPASSWORD();
+		if(loginName == null || "".equals(loginName) || password == null || "".equals(password)){
+			return "-1";
+		}
+		List<Administrator> administrators = dao.getByCondition("loginname ='"+loginName+"'");
+		
+		for(Administrator u : administrators){
+			if(password.equals(u.getPASSWORD()) && "1".equals(u.getSTATE())){
+				this.bindData(u, request);
+				return "1";
+			}
+		}
+		return "-1";
+	}
+	
+	private void bindData(Administrator administrator, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		session.setAttribute("ID", administrator.getID());
+		session.setAttribute("LOGINNAME", administrator.getLOGINNAME());
+		session.setAttribute("NAME", administrator.getNAME());
+		session.setAttribute("PERMISSIONID", administrator.getPERMISSIONID());
+		session.setAttribute("ICON", administrator.getICON());
+	}
+
+	@Override
+	public void logout(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Enumeration attributes = session.getAttributeNames();
+		while (attributes.hasMoreElements()) {
+			String attrName = attributes.nextElement().toString();
+			session.removeAttribute(attrName);
+		}
+		session.invalidate();
+	}
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新增</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../css/added.css" type="text/css"></link>
+<script type="text/javascript"
+	src="../../../frame/jquery/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="../../../frame/jquery-form.js"></script>
+</head>
+
+<body>
+
+	<div id="background">
+		<div id="hah">
+			<div id="operate">
+				<img class="return" src="../img/back4.png"></img>
+				<img class="delete" src="../img/delete4.png" style="display:block"></img>
+			</div>
+			<div class="background1"></div>
+		</div>
+		<div id="dianjixianshi" >
+			<div id="bigBackground"></div>
+			<div id="chooseProject"></div>
+		</div>
+		<div id="title" style="display:block">
+			<div class="choose" id="template">选择服务信息模板</div>
+			<div class="choose" id="detailed">填写服务信息</div>
+		</div>
+		<div id="messageTemplate" style="display:block">
+			<div class="message" id="chooseTemplate">
+				<div class="row" id="second" onclick="chooseMainType()">
+					<div class="caption" style="float:left">所属大类</div>
+					<div class="specific" id="bigType" style="float:left"></div>
+					<div class="more"  style="float:right">&gt;</div>
+				</div>
+				<div class="row" onclick="chooseCategories()" >
+					<div class="caption" style="float:left">所属小类</div>
+					<div class="specific" id="smallType" style="float:left"></div>
+					<div class="more" style="float:right">&gt;</div>
+				</div>
+				<div class="row"  onclick="chooseTemplate()">
+					<div class="caption" style="float:left">日志模板</div>
+					<div class="specific" id="journal" style="float:left"></div>
+					<div class="more" style="float:right">&gt;</div>
+				</div>
+			</div>
+			<input class="anniu" id="fillIn" onclick="toWrite()" type="button" value="开始填写" />
+		</div>
+		<div id="messageTemplateWrite" style="display:none">
+			<div class="content">
+				<div class="OperatingMessage">报价反馈信息</div>
+				<div class="message">
+					<div class="row" id="first">
+						<div class="caption" style="float:left">项目名称</div>
+						<div class="detial" style="float:left">
+							<input id="projectName" class="xinxi"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="caption" style="float:left">联系人</div>
+						<div class="detial" style="float:left">
+							<input id="linkman" class="xinxi"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="caption" style="float:left">报价总额</div>
+						<div class="detial" style="float:left">
+							<input id="TheTotalOffer" class="xinxi" />
+						</div>
+					</div>
+				   <div class="row">
+						<div class="caption" style="float:left">消息标题</div>
+						<div class="detial" style="float:left">
+							<input id="messageTitle" class="xinxi"/>
+						</div>
+					</div>
+					<div class="row" id="name-row">
+						<div class="caption" style="float:left">接收人</div>
+						<div id="hint">(单击姓名可删除)</div>
+						<div class="detial" id="Receiver-detial" style="float:left" >
+							<div id="Receiver" class="xinxi" onclick="chooseReceiver()">添加</div>
+						</div>
+					</div>
+					<ul class="name-list">
+					</ul>
+					 <div class="row" id="photos">
+						<img id="imghead" src="../img/xinzeng.jpg" onclick="openBrowse()"></img>
+						<form id="form1" method="post" enctype="multipart/form- data">
+							<input id="upload" name="upload" type="file"
+								accept="image/png, image/gif, image/jpg, image/jpeg"
+								onchange="previewImage(this)" style="display: none">
+						</form>
+						<div class="fitem picID">
+							<div class="formLabel" style="display:none">
+								<label>图片ID:</label>
+							</div>
+							<div class="formInput" style="display:none">
+								<input id="picID" name="picID">
+							</div>
+						</div>
+					</div> 
+					<!-- <input type="file" id="choose" accept="image/*" multiple>
+					<ul class="img-list">
+						
+					</ul>
+					<div class="row" id="upload">
+					<div class="caption" id="special" style="float:left">上传图片</div>
+					</div> -->
+				</div>
+				<input class="anniu" id="submitMessage" onclick="submitMessage()" type="button" value="提交" />
+			</div>
+			<div></div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/added.js"></script>
+</body>
+</html>

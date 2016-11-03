@@ -1,0 +1,291 @@
+var grocessdata="";
+var OfferorsID="";
+var process="";
+var template="";//模板
+var big_class = [];//获取对象
+var ID="";//获取小类id
+var submitaccount="";
+var getcustom="";//流程人
+var checkID="";//审核人ID
+var checkName="";//审核人
+var type=0;//手动1或者默认0
+//初始化界面
+	$(function(){
+		$(".Jump").bind("click",function(){
+	        $(".SaleJourna").css({"color":"#00FF00","border-bottom-color":"#00FF00"});
+	        $(".SalelogTemp").css({"color":"#000","border-bottom-color":"#000"});
+	        });
+		});
+//查询方法
+	function getSalelogByCondition(condition){
+		$.ajax({
+			url:"../../typeController/getSalelogByCondition.do",
+			type:"POST",
+			data:{condition:condition},
+			async:false,
+			success:function(data){
+				var getData=JSON.parse(data);
+				big_class=getData;
+				}
+			});
+		};
+//模板获取方法
+	function getTemplateByCondition(condition){
+		$.ajax({
+			url:"../../templetController/getstr.do",
+			Type:"POST",
+			data:{conditions:condition},
+			async:false,
+			success:function(data){
+				var getData=JSON.parse(data);
+				template=getData;
+				}
+			});
+		};
+//获取审批人
+	function achievegetcustomer(){
+		$.ajax({
+			url:"../../employeeController/getEmployee.do",
+		    Type:"POST",
+		    data:{},
+			async:false,
+			success:function(data){
+				var getData=JSON.parse(data);
+			    getcustom=getData;
+			    }
+		    });
+		};
+//审核人选择custom流程
+	$("#custom").click(function(){
+		var processcustom='<div class="inner" id="T" style="margin-top:5%"><div>审核人:</div>'+
+		'<div class="DataContent"><span id="Custom"></span>'+
+		'</div>'+
+		'</div>';
+		$("#Control4").html(processcustom);
+		if(!grocessdata)
+			alert("请按顺序选择！");
+		else {
+			$("#Custom").html(getcustom[0].checkname);
+			type=1;
+			}
+		});
+$("#auto").click(function(){
+	type=0;
+	$("#T").css({"display":"none"});
+	});
+//点击事件
+	$("#small").click(function(){
+		$("#Control2").animate({ height: 'toggle'}, 15);
+		});
+	$("#Template").click(function(){
+		$("#Control3").animate({ height: 'toggle'}, 15);
+		});
+	$("#Control4").click(function(){
+		$("#processes").animate({ height: 'toggle'}, 15);
+		$("#processes").html(grocessdata);
+		});
+//获取OfferorsID并初始化
+	$(".Jump").bind("click",function(){
+		$("#write2").show();
+		$("#write1").hide();
+/*//关联员工ID	,submitaccount,process
+ * $.ajax({
+ * url:"../../saleLogController/getOfferorsID.do",
+ * data:{},
+ * type:"post",
+ * async:false,
+ * success:function(data){
+ *  var getDat=JSON.parse(data);
+ *  OfferorsID=getDat[0].ID;
+ *  }
+ *  });
+ */
+//关联流程	
+		$.ajax({
+			url:"../../processController/getprocessID.do",
+			data:{},
+			type:"post",
+			async:false,
+			success:function(data){
+				var getDat=JSON.parse(data);
+				process=getDat[0].processID;
+				submitaccount=getDat[0].submitaccountID;//暂时未用
+				OfferorsID=getDat[0].ID;//暂时获取第一个员工的ID
+				}
+			});
+		});
+//大类选择事件
+	$("#Big").click(function(){
+		var join="";
+		getSalelogByCondition("LEVEL=1 AND TYPE=3");
+		for(var i=0;i<big_class.length;i++){
+			if(big_class[i])
+				join+="<div id='"+big_class[i].ID+"' class='choose' onclick=addsmallType('"+big_class[i].ID+"')>"+big_class[i].NAME+"</div>";
+			$("#Biginner").html(big_class[0].NAME);
+			} 
+		$("#Control1").html(join).animate({
+			height: 'toggle'
+				}, 15);
+		});
+//小类选择事件
+	function addsmallType(p){
+		var text=$("#"+p+"").text();
+		$("#Control1").css("display","none");
+		$("#Biginner").html(text);
+		getSalelogByCondition("PARENTID='"+p+"' AND TYPE=3");
+		var take="";
+		for(var i=0;i<big_class.length;i++){
+			take+="<div id='"+big_class[i].ID+"' class='choose' onclick=addType('"+big_class[i].ID+"')>"+big_class[i].NAME+"</div>";
+			}
+		$("#Control2").html(take);
+		};
+//模板方法
+	function addType(q){
+		var text=$("#"+q+"").text();
+		$("#Control2").css("display","none");
+		$("#smallinner").html(text);
+		getTemplateByCondition(q);
+		var templates="";
+		for(var i=0;i<template.length;i++){
+			templates+="<div id='id"+template[i].ID+"' class='choose' onclick=addTemplate('"+template[i].ID+"')>"+template[i].templetName+"</div>";
+			ID=template[0].ID;	
+			}
+		$("#Control3").html(templates);
+		};	
+//模板选择
+function addTemplate(q){
+	var text=$("#id"+q+"").text();
+	$("#Control3").css("display","none");
+	$("#Templateinner").html(text);
+	ID=q;
+	achievegetcustomer();
+	grocessdata="";
+	for(var i=0;i<getcustom.length;i++){
+		grocessdata+="<div id='id"+getcustom[i].ID+"' class='choose' onclick=addcustom('"+getcustom[i].ID+"')>"+getcustom[i].checkname+"</div>";
+		checkID=getcustom[0].ID;
+		}
+	};
+//审批流程人
+	function addcustom(q){
+	var text=$("#id"+q+"").text();
+	$("#processes").css("display","none");
+	$("#Custom").html(text);
+	checkID=q;
+	checkName=text;
+	};
+//提交销售数据并保存
+	$(document).on("touchend","#Submit",function(){
+		var Assignments=$("#Assignments").val();
+		var ContractVolume=$("#ContractVolume").val();
+		var Receivableamount=$("#Receivableamount").val();
+		var Phone=$("#Phone").val();
+		var Visit=$("#Visit").val();
+		var Email=$("#Email").val();
+		var List=$("#List").val();
+		var SaleLogName=$("#SaleLogName").val();
+		var CustomerName=$("#CustomerName").val();
+		var ContactID=$("#ContactID").val();
+		var Purpose=$("#Purpose").val();
+		var Results=$("#Results").val();
+		var timeStr = $("#time").val();
+	    var Contents=$("#Contents").val();
+		var timeArray = timeStr.split("T");
+		var date1 = timeArray[0].split("-");
+		var date2 = timeArray[1].split(":");
+		var date = new Date();
+		date.setFullYear(date1[0] , date1[1] - 1 ,date1[2] );
+		date.setHours(date2[0] , date2[1], 0, 0);
+		var CreateTime = date.getTime();
+		if(SaleLogName&& Assignments&& ContractVolume&&Phone&& Email && Visit && List  && CustomerName  && ContactID&&Purpose&& Results&& CreateTime &&Contents&& Receivableamount)
+		{
+			var salelog={
+					saleLogName:SaleLogName,
+					Assignments:Assignments,
+					ContractVolume:ContractVolume,
+					Phone:Phone,
+					Email:Email,
+					Visit:Visit,
+					List:List,
+					CustomerName:CustomerName,
+					ContactID:ContactID,
+					Purpose:Purpose,
+					Results:Results,
+					createTime:CreateTime,
+			        Contents:Contents,
+			        Receivableamount:Receivableamount,
+			        templetID:ID,
+			        OfferorsID:OfferorsID,
+			        processID:process
+			        };
+			var processing={
+					processName:SaleLogName,
+					createTime:CreateTime,
+					processType:1,
+					processState:1,
+					type:type
+					};
+//保存salelog数据
+			$.ajax({
+				url:"../../saleLogController/savaSaleLog.do",
+				type:"post",
+				data:salelog,
+				async:false,
+				});
+//保存process数据
+			$.ajax({
+				url:"../../processController/savaprocess.do",
+				type:"post",
+				data:processing,
+				async:false,
+				});		
+//审核
+			$.ajax({
+				url:"../../checkProcessController/savacheckProcess.do",
+				type:"post",
+				data:{
+					processID:process,
+					orderNumber:1,
+					checkName:checkName,
+					checkUserID:checkID
+					},
+					async:false,
+					});
+//记录processDescription信息
+			$.ajax({
+				url:"../../processDescriptionController/savaProcessDescription.do",
+				type:"post",
+				data:{
+					ProcessID:process,
+					orderNumber:1,
+					type:1
+					},
+					async:false,
+					success:function(data){
+						if(data=="1")
+						{
+							alert("OK!");
+							window.location.href="ProjectSubjectManagementSaleLog.html";
+							}
+						}
+					});
+			}
+		/*else {alert("数据并未填完整！");}*/
+		});
+//删除数据
+	/*$(".Jump").click(function(){
+	 * $.ajax({
+	 * url:"../../saleLogController/delete.do",
+	 * Type:"post",
+	 * data:{ID:"20151203204807915"},
+	 * async:false,
+	 * success:function(data){
+	 * alert(data);
+	 * if(data==1)
+	 * {
+	 * alert("success!");
+	 * }
+	 * else alert("fail!");
+	 * }
+	 * });
+	 * });
+	 */

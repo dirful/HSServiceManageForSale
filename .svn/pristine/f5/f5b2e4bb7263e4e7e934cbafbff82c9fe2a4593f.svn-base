@@ -1,0 +1,210 @@
+$(function(){
+	$("#dg").datagrid({
+		width:1000,
+		height:400,
+		pageSize:10,
+		pageList:[10,15,20],
+		nowrap:true,
+		striped:true,
+		singleSelect:true,
+		url:"saleLogController/getsalelog.do",
+		loadMsg:"请等待一会...",
+		columns:[[
+//		   {field:'ck',title:'code',checkbox:true,align:"center"},
+           {field:'ID',title:'ID',width:100,hidden:true,align:"center"},
+		   {field:'SaleLogName',title:'销售日志名称',width:100,align:"center"},
+		   {field:'SaleLogTypeCode',title:'销售日志编码',width:100,align:"center"},
+		   {field:'groundfather',title:'所属大类',width:100,align:"center"},
+		   {field:'childrens',title:'所属小类',width:100,align:"center"},
+		   {field:'state',title:'状态',width:100,align:"center"},
+	       {field:'operate',title:'操作',width:300,align:"center",formatter:function(value,row,index){
+		   return "<input class='border' type='button' value='查看' onclick='see("+index+")' />"+
+		   "<input class='border' type='button' value='禁用' onclick='change("+index+")' />";
+		   }}
+		]],
+		fitColumns:true,
+		pagination:true,
+		rownumbers:true
+//		checkOnSelect:false
+
+	});
+});
+//time查询
+function searchertime(){
+	var fromone=$("#fromone").datetimebox('getValue');
+	var fromsecond=$("#fromsecond").datetimebox('getValue');
+	if(fromone&&fromsecond){
+		$("#dg").datagrid({
+			queryParams:{
+				startime:fromone,
+				stoptime:fromsecond	
+				}
+		});	
+		}
+}
+//查看
+function see(index){
+	var rows=$("#dg").datagrid("getRows");
+//	alert("1:"+rows[index].ID);
+//	console.log(rows[index].ID);
+	$.ajax({
+	     url:"saleLogController/getdetail.do",
+	     type:"POST",
+	     data:{
+	    	 ID:rows[index].ID
+	    	 },
+		 async:false,
+		 success:function(data){
+			 var result = $.parseJSON(data);
+				var add=parent.$.modalDialog({
+					title:"查看日志",
+					width:500,
+					height:600,
+					parameter:result[0],
+					processType:"edit",
+					href:"module/ProjectSubjectManagement/jsp/addProjectSubjectManagement.jsp"
+				});
+		}
+	});
+	
+}
+//禁用
+function change(index){
+	var exchange=0;
+	var rows=$("#dg").datagrid("getRows");
+	if(rows[index].state=="禁用")
+	   {exchange=1;}
+	else if(rows[index].state=="启用") 
+		{exchange=0;}
+	$.ajax({
+	     url:"saleLogController/savastate.do",
+	     type:"POST",
+	     data:{
+	    	 ID:rows[index].ID,
+	    	 condition:exchange
+	    	 },
+		 async:false,
+		 success:function(data){
+			 $('#dg').datagrid('reload');
+				               }
+		});
+	
+}
+//user搜索
+function searcheruser(){
+	var name=$.trim($("#searcher").val());
+	if(name){ 
+	$("#dg").datagrid({
+		queryParams:{condition:"salelog.SaleLogName LIKE '%"+name+"%' "}
+	});
+	$("#dg").datagrid("reload");
+	}
+}
+
+//新增日志
+function add(){
+	var add=parent.$.modalDialog({
+		title:"增加日志",
+		width:500,
+		height:600,
+		parameter:null,
+		processType:"add",
+		href:"module/ProjectSubjectManagement/jsp/addProjectSubjectManagement.jsp",
+		buttons:[{
+			text:"增加",
+			iconCls:'icon-ok',
+			  handler:function(){
+				  var f=add.find('#join');
+				  f.form('submit',{
+					  url:'saleLogController/savaSaleLogbehind.do',
+					  onSubmit:function(param){
+						  return f.form('validate');
+					  },
+					  success:function(result){
+						  alert(result);
+						 add.dialog('close');
+						  if(result==="true1"){
+							  $('#dg').datagrid('reload');
+							  $.prompt();
+						  }else{
+							  alert("添加失败");
+						  }
+					  }
+				  });
+			  }
+			}]
+	});
+}
+
+//刷新
+function allRole(){
+	$("#dg").datagrid({
+		queryParams:{}
+	});
+	$("#dg").datagrid("reload");
+}
+
+//修改
+function editer(){
+	var modys=$("#dg").datagrid("getSelections");
+	if(modys.length<=0){
+		$.messager.alert("提示","请选择！");
+		return ;
+	}else if(modys.length>1){
+		$.messager.alert("提示","请选择一条进行修改！");
+		return ;
+	}
+	var mody=modys[0];
+	var dialog=parent.$.modalDialog({
+		title:"修改销售日志信息",
+		width:500,
+		height:600,
+		parameter:mody,
+		processType:"edit",
+		href:"module/ProjectSubjectManagement/jsp/addProjectSubjectManagement.jsp",
+		buttons:[{
+			text:"保存",
+			iconCls:'icon-ok',
+			  handler:function(){
+				  var f=dialog.find('#join');
+				  f.form('submit',{
+					  url:'saleLogController/updataSaleLog.do',
+					  onSubmit:function(param){
+						  return f.form('validate');
+					  },
+					  success:function(result){
+						  dialog.dialog('close');
+						  if(result==="true"){
+							  $('#dg').datagrid('reload');
+							  $.prompt();
+						  }else{
+							  alert("failed 失败");
+						  }
+					  }
+				  });
+			  }
+		}]
+	});	
+}
+//删除
+function removable(){
+	var modys=$("#dg").datagrid("getSelections");
+	if(modys.length<=0){
+		$.messager.alert("提示","请选择！");
+		return ;
+	}
+	var mody=[];
+	for(var i=0;i<modys.length;i++){
+		mody.push(modys[i].ID);
+	}
+	jQuery.ajaxSettings.traditional=true;//阻止深度化序列
+	$.messager.confirm("选择框","确定删除吗？",function(removable){
+		if(removable!="-1"){
+			$.post("saleLogController/deleteSaleLog.do",{ids:mody},function(data){
+				$("#dg").datagrid("reload");
+			});
+		}else{
+			alert("删除失败！");
+		}
+	});	
+}
